@@ -751,6 +751,7 @@ QuickFolders.Options = {
 		const util = QuickFolders.Util,
 					State = util.Licenser.ELicenseState,
 					options = QuickFolders.Options,
+					prefs = QuickFolders.Preferences,
 					QI = util.getMail3PaneWindow().QuickFolders.Interface; // main window
     let wd = window.document,
         getElement = wd.getElementById.bind(wd),
@@ -769,7 +770,7 @@ QuickFolders.Options = {
 					    later = new Date(today.setDate(today.getDate()+30)), // pretend it's a month later:
 							dateString = later.toISOString().substr(0, 10);
 					// if we were a month ahead would this be expired?
-					if (util.Licenser.DecryptedDate < dateString) {
+					if (util.Licenser.DecryptedDate < dateString || prefs.getBoolPref("debug.premium.forceShowExtend")) {
 						options.labelLicenseBtn(btnLicense, "extend");
 					}
 					else
@@ -965,6 +966,11 @@ QuickFolders.Options = {
 			options.setCurrentToolbarBackground(item.value, true);
 		}
 	} ,
+  
+  applyOrdinalPosition: function applyOrdinalPosition() {
+    // refresh the toolbar button in main window(s)
+    QuickFolders.Interface.updateMainWindow(true);
+  } ,
 	
 	// change background color for current folder bar
 	// 5 choices [string]: default, dark, custom, translucent, lightweight
@@ -1492,11 +1498,11 @@ QuickFolders.Options = {
 			} );	
 	},
 	
-	showAboutConfig: function showAboutConfig(clickedElement, filter, readOnly, updateFolders) {
+	showAboutConfig: function showAboutConfig(clickedElement, filter, readOnly, updateUI) {
     const Cc = Components.classes,
           Ci = Components.interfaces,
 					util = QuickFolders.Util;
-	  updateFolders = (typeof updateFolders != 'undefined') ? updateFolders : false;
+	  updateUI = (typeof updateUI != 'undefined') ? updateUI : false;
     
 	  util.logDebug('showAboutConfig(clickedElement: ' 
       + (clickedElement ? clickedElement.tagName : 'none') 
@@ -1524,7 +1530,7 @@ QuickFolders.Options = {
       else
         w = win.openDialog(uri, name, features);
 		}
-		if (updateFolders) {
+		if (updateUI) {
 		  // make sure QuickFolders UI is updated when about:config is closed.
 			w.addEventListener('unload', function(event) { QuickFolders.Interface.updateMainWindow(); });
 		}
