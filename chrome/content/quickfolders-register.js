@@ -500,7 +500,7 @@ QuickFolders.Licenser = {
     // get current date
     let today = new Date(),
         dateString = today.toISOString().substr(0, 10);
-    if (this.DecryptedDate < dateString) {
+    if (false) {   // this.DecryptedDate < dateString) {
       this.ValidationStatus = ELS.Expired;
 			let date1 = new Date(this.DecryptedDate);
 			this.ExpiredDays = parseInt((today - date1) / (1000 * 60 * 60 * 24)); 
