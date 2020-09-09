@@ -446,6 +446,7 @@ QuickFolders.Util = {
   
   hasPremiumLicense: function hasPremiumLicense(reset) {
 		const licenser = QuickFolders.Util.Licenser;
+    return true
     // early exit for Licensed copies
     if (licenser.isValidated) 
       return true;
