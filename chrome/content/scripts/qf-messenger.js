@@ -35,6 +35,11 @@ function onLoad(activatedWhileWindowOpen) {
     WL.injectCSS("chrome://quickfolders/content/quickfolders-mods.css");
 
     WL.injectElements(`
+    
+        <keyset>
+          <key id="quickFolders-ToggleTree" keycode="VK_F7" oncommand="QuickFolders.Interface.toggleFolderTree();"/>
+        </keyset>
+    
         <!-- Thunderbird & SeaMonkey -->
         <toolbarpalette id="MailToolbarPalette">
           <toolbarbutton id="QuickFolders-toolbar-button" 
@@ -362,8 +367,8 @@ WL.injectElements(`
                     <toolbarbutton id="QuickFoldersCurrentFolder"
                                                  label="Current Folder"
                                                  class="selected-folder"
-                                                 ondragenter="QuickFolders.buttonDragObserver..dragEnter(event);"
-                                                 ondragover="QuickFolders.buttonDragObserver..dragOver(event);"/>
+                                                 ondragenter="QuickFolders.buttonDragObserver.dragEnter(event);"
+                                                 ondragover="QuickFolders.buttonDragObserver.dragOver(event);"/>
                 </hbox>
                 <toolbarbutton id="QuickFolders-NavigateRight"
                                              class="icon"
@@ -507,6 +512,10 @@ insertafter="QuickFolders-LabelBox">
     window.QuickFolders_mailSession.AddFolderListener(window.QuickFolders.FolderListener, Components.interfaces.nsIFolderListener.all);
 //   obsolete   window.QuickFolders.addLoadEventListener();
     window.QuickFolders.initDelayed(window, WL);
+    //WL.messenger.windows.create({}); //goes into loop
+    //WL.context.apiCan.findAPIPath("compose").beginNew(); // Geoff, but: context not defined
+    //console.log(WL.context);
+    //WL.messenger.compose.beginNew();  //example how to call api from legacy
 }
 
 function onUnload(isAddOnShutDown) {

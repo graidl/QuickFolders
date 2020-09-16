@@ -437,7 +437,7 @@ QuickFolders.FilterWorker = {
 				let args;
 				if (emailAddress) {
 					let retVals = { answer: null },
-					    win = window.openDialog('chrome://quickfolders/content/filterTemplate.xul',
+					    win = window.openDialog('chrome://quickfolders/content/filterTemplate.xhtml',
 						'quickfolders-filterTemplate',
 						'chrome,titlebar,centerscreen,modal,centerscreen,dialog=yes,accept=yes,cancel=yes',
 						retVals).focus();
@@ -595,7 +595,7 @@ QuickFolders.FilterWorker = {
 					//args.filterName = newFilter.filterName;
 					// check http://mxr.mozilla.org/comm-central/source/mailnews/base/search/content/FilterEditor.js
 					// => filterEditorOnLoad()
-					window.openDialog("chrome://messenger/content/FilterEditor.xul", "",
+					window.openDialog("chrome://messenger/content/FilterEditor.xhtml", "",
 					                  "chrome, modal, resizable,centerscreen,dialog=yes", args);
 
 					// If the user hits ok in the filterEditor dialog we set args.refresh=true
@@ -675,7 +675,7 @@ QuickFolders.FilterWorker = {
         util = QuickFolders.Util;
 		element.value = this.getCurrentFilterTemplate();
     try {
-      let loc = QuickFolders.Preferences.service.getStringPref("general.useragent.locale");
+      let loc = Services.locale.requestedLocales[0]; // QuickFolders.Preferences.service.getStringPref("general.useragent.locale");
       if (loc) {
         util.logDebug('Locale found: ' + loc);
         if (loc.indexOf('en')!=0) {
@@ -683,9 +683,19 @@ QuickFolders.FilterWorker = {
           // document.getElementById('quickFiltersPromoBox').collapsed = true;
         }
       }
+      // window.addEventListener('dialogaccept', function () { QuickFolders.Options.accept(); });
+      window.addEventListener('dialogcancel', function () { return QuickFolders.FilterWorker.cancelTemplate(); });
+      window.addEventListener('dialogextra1', function (event) { 
+        return QuickFolders.FilterWorker.acceptTemplate();
+      });
+      window.addEventListener('dialogextra2', function (event) { 
+        QuickFolders.Util.openLinkInBrowser(event,'http://quickfolders.org/donate.html');
+      });
+      
+      
     }
     catch (ex) {
-      util.logException("QuickFolders.FilterWorker.loadTemplate()", e);
+      util.logException("QuickFolders.FilterWorker.loadTemplate()", ex);
     }
     
 	} ,

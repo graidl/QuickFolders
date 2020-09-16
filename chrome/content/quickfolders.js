@@ -578,13 +578,8 @@ var QuickFolders = {
 	get tabContainer() {
 		if (!this._tabContainer) {
 			const util = QuickFolders.Util;
-			if (util.Application=='Postbox')
-				this._tabContainer = this.doc.getElementById('tabmail').mTabContainer;
-			else {
-				// from Tb59 this element is called 'tabmail-tabs' and not 'tabcontainer'
-				this._tabContainer = 
-				  this.doc.getElementById('tabmail').tabContainer || this.doc.getElementById('tabmail-tabs');
-			}
+      this._tabContainer = 
+        this.doc.getElementById('tabmail').tabContainer || this.doc.getElementById('tabmail-tabs');
 				
 		}
 		return this._tabContainer;
@@ -639,7 +634,7 @@ var QuickFolders = {
 	initDelayed: function initDelayed(win, WLorig) {
 	  if (this.initDone) return;
 	  QuickFolders.WL = WLorig;
-		const Cc = Components.classes,
+	  const Cc = Components.classes,
 					Ci = Components.interfaces,
 					prefs = QuickFolders.Preferences,
 					util = QuickFolders.Util,
@@ -712,22 +707,12 @@ var QuickFolders = {
           if (window.arguments) {
             let args = window.arguments,
                 fld;
-            switch (util.Application) {
-              case 'Thunderbird':
-                // from messageWindow.js actuallyLoadMessage()
-                if (args[0] instanceof Components.interfaces.nsIMsgDBHdr) {
-                  let msgHdr= args[0];
-                  fld = msgHdr.folder;
-                }
-                break;
-              default:
-                // This appears to work for Sm + Postbox alike
-                if (args.length>1 && typeof args[1] == 'string') {
-                  fld = QuickFolders.Model.getMsgFolderFromUri(args[1]);
-                }
-                else if (args.length>=3 && args[2])
-                  fld = args[2].viewFolder;
+            // from messageWindow.js actuallyLoadMessage()
+            if (args.length && args[0] instanceof Components.interfaces.nsIMsgDBHdr) {
+              let msgHdr= args[0];
+              fld = msgHdr.folder;
             }
+            
             let cF = QuickFolders.Interface.CurrentFolderTab;
             // force loading main stylesheet (for single message window)
             QI.ensureStyleSheetLoaded('quickfolders-layout.css', 'QuickFolderStyles');
@@ -778,53 +763,7 @@ var QuickFolders = {
                        okCallback: renameCallback, 
                        name: folder.prettyName});
   },
-  
-  // rename folder - Postbox + SeaMonkey
-  renameFolderSuite: function qf_RenameFolder(name, uri) {
-    var folderTree = GetFolderTree();
-    if (folderTree) {
-      if (uri && (uri != "") && name && (name != "")) {
-        var selectedFolder;
-        switch(QuickFolders.Util.Application) {
-          case 'SeaMonkey':
-            selectedFolder = GetMsgFolderFromUri(uri);
-            break;
-          case 'Postbox':
-            selectedFolder = GetResourceFromUri(uri).QueryInterface(Components.interfaces.nsIMsgFolder);
-            break;
-        }
-        if (gDBView)
-          gCurrentlyDisplayedMessage = gDBView.currentlyDisplayedMessage;
-
-        ClearThreadPane();
-        ClearMessagePane();
-        folderTree.view.selection.clearSelection();
-
-        try {
-          selectedFolder.rename(name, msgWindow);
-          try {
-             // no RenameCompleted event in Postbox?
-            QuickFolders.Model.moveFolderURI(uri, name);
-          }
-          catch (ex) {
-            ;
-          }
-        }
-        catch(e) {
-          SelectFolder(selectedFolder.URI);  //restore selection
-          throw(e); // so that the dialog does not automatically close
-          dump ("Exception : RenameFolder \n");
-        }
-      }
-      else {
-        dump("no name or nothing selected\n");
-      }
-    }
-    else {
-      dump("no folder tree\n");
-    }
-  } ,
-   
+     
 	initListeners: function () {
 			const util = QuickFolders.Util,
 			      win = util.getMail3PaneWindow(),
@@ -857,7 +796,8 @@ var QuickFolders = {
 
 			let tabmail = document.getElementById("tabmail"),
 					idx = QuickFolders.tabContainer.selectedIndex || 0,
-			    tab = util.getTabInfoByIndex(tabmail, idx); // in Sm, this can return null!
+			    tab = util.getTabInfoByIndex(tabmail, idx),
+          tabMode = null; 
 			if (tab) {
 				let tabMode = util.getTabMode(tab);
 				// is this a new Thunderbird window?
@@ -882,14 +822,17 @@ var QuickFolders = {
 					QI.currentActiveCategories = cats;
 				}
 			}
-			else
-				util.logDebug('init: could not retrieve tab / tabMode\n tab=' + tab + ' tabMode = ' + tabMode);
+			else {
+				util.logDebug('init: could not retrieve tab / tabMode\n tab=' + tab);
+      }
 				
-			QI.updateMainWindow();  // selectCategory already called updateFolders!  was that.Interface.updateFolders(true,false)
 		}
 		catch(ex) {
 			util.logException('init: folderEntries', ex);
 		}
+    finally {
+			QI.updateMainWindow();  // selectCategory already called updateFolders!  was that.Interface.updateFolders(true,false)
+    }
 	
 	},
 
@@ -1260,18 +1203,18 @@ var QuickFolders = {
 		} ,
 
 		dragOver: function menuObs_dragOver(evt, flavour, dragSession){
-      if (!evt) debugger;
-      dragSession = Cc["@mozilla.org/widget/dragservice;1"].getService(Ci.nsIDragService).getCurrentSession();
+      if (!dragSession) 
+        dragSession = Cc["@mozilla.org/widget/dragservice;1"].getService(Ci.nsIDragService).getCurrentSession();
       
       let types = Array.from(evt.dataTransfer.mozTypesAt(0)),
           contentType = types[0];
 
-      
-			session.canDrop = (contentType === "text/x-moz-message");
-			if (null !== QuickFolders_globalLastChildPopup) {
-				/*QuickFolders_globalLastChildPopup.firstChild.hidePopup();*/
-				QuickFolders_globalLastChildPopup=null;
-			}
+      if (dragSession) {
+        dragSession.canDrop = (contentType === "text/x-moz-message");
+        if (null !== QuickFolders_globalLastChildPopup) {
+          QuickFolders_globalLastChildPopup=null;
+        }
+      }
 		},
 
 		// drop mails on popup: move mail, like in buttondragobserver

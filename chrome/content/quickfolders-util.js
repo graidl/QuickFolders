@@ -69,6 +69,7 @@ QuickFolders.Util = {
 	HARDCODED_CURRENTVERSION : "5.0", // will later be overriden call to AddonManager
 	HARDCODED_EXTENSION_TOKEN : ".hc",
 	ADDON_ID: "quickfolders@curious.be",
+	ADDON_NAME: "QuickFolders",
 	FolderFlags : {  // nsMsgFolderFlags
 		MSG_FOLDER_FLAG_NEWSGROUP : 0x0001,
 		MSG_FOLDER_FLAG_NEWSHOST  : 0x0002,
@@ -976,16 +977,14 @@ QuickFolders.Util = {
 	getTabInfoLength: function getTabInfoLength(tabmail) {
 		if (tabmail.tabInfo)
 		  return tabmail.tabInfo.length;
-	  if (tabmail.tabOwners)
-		  return tabmail.tabOwners.length;
 		return null;
 	} ,
 	
 	getTabInfoByIndex: function getTabInfoByIndex(tabmail, idx) {
 		if (tabmail.tabInfo && tabmail.tabInfo.length)
 			return tabmail.tabInfo[idx];
-		if (tabmail.tabOwners)
-		  return tabmail.tabOwners[idx];
+    this.logDebug("getTabInfoByIndex("+ tabmail + ", " + idx +") fails: check tabInfo length! = " + tabmail.tabInfo);
+    console.log(tabmail);
 		return null;
 	} ,
 	
@@ -1006,8 +1005,6 @@ QuickFolders.Util = {
 			}
 			return tab.mode.name;
 		}
-		if (tab.type)  // Pb
-		  return tab.type;
 		return "";
 	},
 	
