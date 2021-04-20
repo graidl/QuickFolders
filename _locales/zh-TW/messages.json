@@ -90,7 +90,7 @@
   },
   
   "special-offer-head" : {
-    "message": "QuickFolders已有12年了-請確保它可以繼續！"
+    "message": "使QuickFolders成為未來的證明！"
   } ,  
 
   "special-offer-intro" : {
@@ -98,19 +98,23 @@
   } ,
   
   "special-offer-content" : {
-    "message": "現在是獲得許可證的最佳機會，因為慶祝QuickFolders成立12週年的QuickFolders Pro許可證價格降低了 {boldStart} 50％{boldEnd}！ 此特別優惠將持續到 {boldStart} 3月31日{boldEnd}."
+    "message": "使QuickFolders成為將來的證明並獲取許可，同時QuickFolders Pro的價格降低{boldStart} 40％{boldEnd}！ 此特別優惠將在{boldStart} 5月1日{boldEnd}之前提供。"
   },
   
   "whats-new-intro" : {
-    "message": "在此處閱讀有關自Thunderbird 78引入以來的新功能：" 
+    "message": "在此處閱讀詳細的更改日誌（僅英語）：" 
   },
   
   "whats-new-btn" : {
     "message": "什麼是新的？"
   }, 
   
+  "whats-new-head" : {
+    "message": "強調"
+  },
+  
   "whats-new-list" : {
-    "message" : "QuickFolders Pro 現在具有高級搜索設置，例如靜默移動和排除您選擇的帳戶或將結果限制在一個帳戶內，並且具有用於移動和復製文件夾的改進功能。 我還修復了更多功能，以與Thunderbird 88和更高版本兼容。"
+    "message" : "此版本通過以下功能進一步擴展了quickMove功能：{L1}單個郵件標籤：此選項可在移動郵件後自動在同一標籤中打開下一封電子郵件{L2} {L1}選項，以完全取消quickMove（並清空其列表 {L2} {L1}通過讀取_和空格分隔符並將它們視為搜索名稱的開頭來進行高級匹配，例如：{L2} {L1}已修復：在查看時搜索文件夾 {L2} {L1}這些和其他用於限制某些帳戶搜索結果的功能可以通過QuickFolders Pro標籤上的“高級搜索設置”進行配置。{L2}"
   },  
 
   "time-and-effort": { 
