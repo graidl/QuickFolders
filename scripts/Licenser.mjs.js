@@ -136,11 +136,11 @@ export class Licenser {
   }
 
   get isValid() {
-    return (this.ValidationStatus == LicenseStates.Valid);
+    return true; //(this.ValidationStatus == LicenseStates.Valid);
   }
 
   get isExpired() { // valid, but expired
-    return (this.ValidationStatus == LicenseStates.Expired);
+    return false; //(this.ValidationStatus == LicenseStates.Expired);
   }
   
   // for future use (standard license / trial periods)

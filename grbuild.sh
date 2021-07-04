@@ -7,7 +7,7 @@
 # pwsh -Command "(gc -en UTF8NoBOM manifest.json) -replace 'pre%oldRev%', 'pre%quickFoldersRev%' | Out-File manifest.json"
 # rem "C:\Program Files\7-Zip\7z" a -xr!.svn quickFolders.zip install.rdf chrome.manifest chrome defaults license.txt
 rm -f qf.zip
-zip -r qf.zip manifest.json _locales chrome popup license.txt *.js release-notes.html
+zip -r qf.zip manifest.json _locales scripts chrome popup license.txt *.js *.html
 mv qf.zip qf.xpi
 #"C:\Program Files\7-Zip\7z" a -xr!.svn QuickFoldersWeb.zip manifest.json install.rdf chrome.manifest chrome defaults license.txt
 #echo %quickFoldersRev% > revision.txt

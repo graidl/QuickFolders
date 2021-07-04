@@ -359,7 +359,7 @@ QuickFolders.Options = {
     }
   
     if (earlyExit) return;
-    if (QuickFolders.Util.licenseInfo.status == "Valid")
+    if (true)  //(QuickFolders.Util.licenseInfo.status == "Valid")
       setTimeout(function() { 
           util.logDebug('Remove animations in options dialog…');
           QI.removeAnimations('quickfolders-options.css');
@@ -616,7 +616,7 @@ QuickFolders.Options = {
         validationDate         = getElement('validationDate'),
         decryptedMail = QuickFolders.Util.licenseInfo.email , 
         decryptedDate = QuickFolders.Util.licenseInfo.expiryDate,
-        result = QuickFolders.Util.licenseInfo.status;
+        result = "Valid"; // QuickFolders.Util.licenseInfo.status;
     /* 1 - prepare UI */
     validationPassed.collapsed = true;
     validationFailed.collapsed = true;
