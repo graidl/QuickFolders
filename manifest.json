@@ -1,24 +1,44 @@
 {
   "manifest_version" : 2,
+  "applications" : {
+    "gecko" : {
+      "id" : "quickfolders@curious.be",
+      "strict_min_version" : "78.0"
+    }
+  },
+  "author": "Axel Grude, Klaus Buecher/opto",
   "name" : "QuickFolders",
   "description" : "__MSG_extensionDescription__",
-  "version" : "5.5",
+  "version" : "5.6.2",
   "default_locale": "en",
-  "author": "Axel Grude, Klaus Buecher/opto",
   "developer" : {
       "name" : "Axel Grude, Klaus Buecher/opto",
       "url" : "https://quickfolders.org/index.html"
   },
-  "applications" : {
-    "gecko" : {
-        "id" : "quickfolders@curious.be",
-        "strict_min_version" : "78.0"
-    }
-  },
   "background": {
-    "scripts": ["qf-background.js"]
+    "page": "qf-background.html"
   },
+  "permissions": [
+  ],
   "experiment_apis": {
+    "ex_accounts": {
+      "schema": "chrome/content/api/ex_accounts/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["ex_accounts"]],
+        "script": "chrome/content/api/ex_accounts/implementation.js"
+
+      }
+    },
+    "ex_notifications": {
+      "schema": "chrome/content/api/ex_notifications/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["ex_notifications"]],
+        "script": "chrome/content/api/ex_notifications/implementation.js"
+
+      }
+    },
     "WindowListener": {
       "schema": "chrome/content/api/WindowListener/schema.json",
       "parent": {
@@ -36,6 +56,15 @@
 
       }
     },
+    "NotifyTools": {
+      "schema": "chrome/content/api/NotifyTools/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["NotifyTools"]],
+        "script": "chrome/content/api/NotifyTools/implementation.js"
+
+      }
+    },
     "Utilities": {
       "schema": "chrome/content/api/Utilities/schema.json",
       "parent": {
@@ -46,7 +75,6 @@
        }
     }
   },
-
  "icons" : {
     "32" : "chrome/content/skin/ico/QuickFolders_32.svg",
     "64" : "chrome/content/skin/ico/QuickFolders_32.svg"

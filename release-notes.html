@@ -1,18 +1,44 @@
-<b>Release 5.5</b>
+<b>Release 5.6.2</b>
 <ul>
 <li> In order to maintain full functionality, this Add-on had to be rewritten as a mail extension with experiment API, which will require full permissions on installation. As regards being allowed to do stuff, it is actually not different with any classic Add-on: they always had full access to all functions within Thunderbird. The modern mail extensions will have much more tightly managed permissions - eventually QuickFolders will also be able use this more modern approach - but the APIs for this have to be created and accepted by Mozilla first. This means a lot of ongoing work for the next 12 months forward - please support this with a license or donation:</li>
 <li>You can <a href="http://sites.fastspring.com/quickfolders/product/quickfolders?referrer=qf-version-page">buy a license</a> here. This is the preferred way of funding all the ongoing work and improvements.</li>
-<li>If you are not ready for a license you can also <a href="https://quickfolders.org/donate.html#donate">donate from here</a></ul>
+<li>If you are not ready for a license you can also <a href="https://quickfolders.org/donate.html#donate">donate from here</a></li>
+</ul>
 
 <b>Improvements</b>
 <ul>
-<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/136">[issue 136]</a> Fixed: There were no folder suggestions during quickJump / quickMove while viewing mails in a virtual folder view (such as search results / or after open message in conversation). This was a  side effect of changes from <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/57">[issue 57]</a>.</li>
-<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/135">[issue 135]</a> quickMove / quickJump: When using "/" for parent folders searching for substrings should work better... The Search algorithm now recognizes Underscore _ and Space within folder names so that parent folders with  prefixes such as "01_test" can still be found without knowing the number (type "test\subfoldername" to get 
-a match in this example). </li>
-<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/132">[issue 132]</a> In a single message tab, quickMove used to redisplay the mail after moving it with quickMove.
-This behavior has now been changed on request to go to the next email instead. If necessary, this new behavior can be changed in via the advanced search settings button in the Single Message Tab box on the QF Pro settings tab.</li>
-<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/134">[issue 134]</a> Feature Request: Escape key to "Cancel quickMove" completely. Before this change, Cancel would hide the search box but keep the list of mails queued to be moved so that more items could be added later. If necessary, the old behavior can be restored in the Advanced search settings dialog. </li>
-<li> Changed folder tree shortcut from F7 to F9 (consistent with Thunderbird 68).  Push F0 to make the folder tree visible or quickly hide it.</li>
-<li>Increased maximum subfolders in a dropdown menu from 100 to 250.</li>
-<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/140">[issue 140]</a> Fixed: Restriction to current server unexpectedly suggests creating new subfolder.</li>
+<li> From now on, the update splash screen will not be displayed automatically anymore. Instead, there will be a message on the QuickFolders button which can be clicked once to read the latest news. There is also a new entry "Show Splash screen" on the QuickFolders tools menu</li>
+<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/155">[issue 155]</a> Support entering multiple words in a search string to find longer folder names that are composited, such as "Fred.Flintstone" "Invoices June 2020" "Research+Development". These can now be found by entering the starting letters of the words within the folder name, in any order. e.g. "f f" "2020 inv" "Dev Res". The following characters are regarded as word boundaries and don't need to be typed:
+_ . - + & @
+
+This can also be combined with the existing parent folder syntax by entering the parent folder start followed by a forward slash "/", e.g. enter "A/rev a" to match subfolders like "AMO » AMO-Reviews" "Addons » Accepted Revisions".
+
+Use the new character ">" to skip any folder within the path.
+
+Use the [?] symbol to the right of the search field to display a help panel.</li>
+<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/163">[issue 163]</a> quickMove: folder created while moving is not displayed on top of recent folders menu.</li>
+<li>[web extension migration] Improved many functions that worked via accessing the "most recent Thunderbird window" and replaced them with event notifications that propagate to every window. This uses the Notification Tool library and the background script (a mechanism of the new API based "mail extensions" model).
+
+This way all Thunderbird windows (if you work from multiple windows) will be updated correctly when doing one of the following actions. All these now work simultaneously and update in multiple Thunderbird windows:
+  <ul>
+    <li>rename a tab</li>
+    <li>move a tab positionto a different position</li>
+    <li>delete a tab or remove it from or add it to a category</li>
+    <li>change the layout of all QuickFolders toolbar elements from the options dialog (themes, colors)</li>
+    <li>rename QuickFolders categories</li>
+    <li>change the theme / buttons of the Current Folder Bar</li>
+    <li>change options of where to display the Current Folder Bar (main window, message tab, single message window)</li>
+    <li>changes to the license when entered / validated</li>
+    <li>unlocking features such as the advanced / tab-specific properties when a license key is entered</li>
+  </ul>
+</li>
 </ul>
+
+<b>Bug Fixes + Miscellaneus</b>
+<ul>
+<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/167">[issue 167]</a> Fixed: Unreadable colors of QuickFolders toolbar font and Navigation bar icons in Linux.</li>
+<li> <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/150">[issue 150]</a> Unwanted new line characters "\n" were displayed in some strings in version 5.5.2</li>
+<li>[web extension migration] Licenser code migrated into background script.</li>
+<li> Ongoing work of Rewriting code to use APIs instead of Thunderbird's internal functions see <a target="_blank" href="https://github.com/RealRaven2000/QuickFolders/issues/147">[issue 147]</a> for up to date detail.</li>
+</ul>
+

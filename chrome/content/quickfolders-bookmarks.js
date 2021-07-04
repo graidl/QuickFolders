@@ -7,35 +7,8 @@ For details, please refer to license.txt in the root folder of this extension
 
 END LICENSE BLOCK */
 //QuickFolders.Util.logDebug('Defining QuickFolders.bookmarks...');
-if (typeof ChromeUtils.import == "undefined") 
-	Components.utils.import("resource://gre/modules/Services.jsm");
-else
-	var {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
-
-
-if (QuickFolders.Util.Application == 'Postbox') { 
-  if (typeof XPCOMUtils != 'undefined') {
-    XPCOMUtils.defineLazyGetter(this, "NetUtil", function() {
-    Components.utils.import("resource://gre/modules/NetUtil.jsm");
-    return NetUtil;
-    });
-  }
-  else {
-    Components.utils.import("resource://gre/modules/NetUtil.jsm");
-  }
-}
-else {
-	if (typeof ChromeUtils.import == "undefined") 
-		Components.utils.import("resource:///modules/MailUtils.js");
-	else {
-		try { // Tb 61
-			var { MailUtils } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
-		}
-		catch (ex) {
-			ChromeUtils.import("resource:///modules/MailUtils.js");
-		}
-	}
-}
+var {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { MailUtils } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
 
 
 // drop target - persistable "reading list"
@@ -45,9 +18,6 @@ QuickFolders.bookmarks = {
   dirty: false,     // force update (rload + rebuild menu) after removing invalid item
   get isDebug() {
     return (QuickFolders.Preferences.isDebugOption('bookmarks'));
-  },
-  get document() {
-    return QuickFolders.doc;
   },
   get hasEntries() {
     return (this.Entries.length > 0); 
@@ -152,49 +122,14 @@ QuickFolders.bookmarks = {
           let mode = QuickFolders.Interface.CurrentTabMode,
               isInTab = (mode == "3pane" || mode == "folder");
 					
-          switch(util.Application) {
-            case 'Thunderbird':
-							// [Bug 26481] make sure to switch to another tab if that folder is open:
-							if (util.CurrentFolder!=msgHdr.folder)
-								QuickFolders_MySelectFolder(msgHdr.folder.URI);
-              MailUtils.displayMessageInFolderTab(msgHdr);
-              break;
-            case 'SeaMonkey':
-              if (isInTab) {
-                if (util.CurrentFolder!=msgHdr.folder)
-                  QuickFolders_MySelectFolder(msgHdr.folder.URI);
-                // from mailWindowOverlay.js - NavigateToUri(target)
-                // let msgHdrKey = messenger.msgHdrFromURI(entry.Uri).messageKey;
-                gDBView.selectMsgByKey(msgHdr.messageKey);
-                return true;
-              }
-              else
-                return util.openMessageTabFromUri(entry.Uri); // for now, new tab
-              break;
-            case 'Postbox':
-              if (isInTab) {
-                if (util.CurrentFolder!=msgHdr.folder)
-                  QuickFolders_MySelectFolder(msgHdr.folder.URI);
-                gDBView.selectMsgByKey(msgHdr.messageKey);
-                return true;
-              }
-              else
-                return util.openMessageTabFromUri(entry.Uri); // for now, new tab
-          }
+          // [Bug 26481] make sure to switch to another tab if that folder is open:
+          if (util.CurrentFolder!=msgHdr.folder)
+            QuickFolders_MySelectFolder(msgHdr.folder.URI);
+          MailUtils.displayMessageInFolderTab(msgHdr);
           return true;
         case 'window':
           if (msgHdr) {
-            switch(util.Application) {
-              case 'Thunderbird':
-                MailUtils.openMessageInNewWindow(msgHdr);
-                break;
-              case 'SeaMonkey':
-                MailUtils.displayMessage(msgHdr);
-                break;
-              case 'Postbox':
-                MsgOpenNewWindowForMessage(entry.Uri, entry.FolderUri, true);
-                break;
-            }
+            MailUtils.openMessageInNewWindow(msgHdr);
             return true;
           }
           break;
@@ -319,7 +254,7 @@ QuickFolders.bookmarks = {
         prefs = QuickFolders.Preferences,
         countEntries = this.Entries.length;
     const MAX_BOOKMARKS = 5;
-    if (!util.hasPremiumLicense(false) && countEntries>2) {
+    if (!util.hasPremiumLicense() && countEntries>2) {
       let text = util.getBundleString("qf.notification.premium.readingList",
                   "You have now {1} bookmarks defined. The free version of QuickFolders allows a maximum of {2}.");
       util.popupProFeature("bookmarks", text.replace("{1}", countEntries).replace("{2}", MAX_BOOKMARKS.toString()));
@@ -533,16 +468,6 @@ QuickFolders.bookmarks = {
       return null; // in Linux we cannot get the browser while options dialog is displayed :(
     try {
       let isOriginBrowser = false;
-      // for SeaMonkey we need to determine whether we opened from the messenger or from the navigator window
-      if (util.Application=='SeaMonkey' && !tabmail) {
-        tabmail = browser.document ? browser.document.getElementById("tabmail") : document.getElementById("tabmail");
-        // double check whether we come from browser
-        if (util.Application=='SeaMonkey') {
-          if (!tabmail) {
-            isOriginBrowser = true;
-          }
-        }
-      }
       /*     GET CONTEXT FROM CURRENT MAIL TAB  */
       if (!isOriginBrowser) {
         if (tabmail) {
@@ -691,9 +616,7 @@ QuickFolders.bookmarks = {
 
   readStringFile: function readStringFile() {
     // To read content from file
-		const {OS} = (typeof ChromeUtils.import == "undefined") ?
-		  Components.utils.import("resource://gre/modules/osfile.jsm", {}) :
-		  ChromeUtils.import("resource://gre/modules/osfile.jsm");		
+		const {OS} = ChromeUtils.import("resource://gre/modules/osfile.jsm");		
     // To read & write content to file
     // const {TextDecoder, TextEncoder, OS} = Cu.import("resource://gre/modules/osfile.jsm", {});  
     
@@ -794,14 +717,8 @@ QuickFolders.bookmarks = {
   save: function save()  {
     let util = QuickFolders.Util;
     util.logDebug("bookmarks.save()…");
-    if (util.Application == "Postbox" && util.PlatformVersion < 52) {
-      this.Postbox_writeFile(this);  // pass bookmarks object
-      return;
-    }
     try {
-			const {OS} = (typeof ChromeUtils.import == "undefined") ?
-				Components.utils.import("resource://gre/modules/osfile.jsm", {}) :
-				ChromeUtils.import("resource://gre/modules/osfile.jsm");		
+			const {OS} = ChromeUtils.import("resource://gre/modules/osfile.jsm");		
 
       let bookmarks = this, // closure this
           profileDir = OS.Constants.Path.profileDir,
@@ -848,62 +765,7 @@ QuickFolders.bookmarks = {
       util.logException('QuickFolders.bookmarks.save()', ex);
     }
         
-  } ,
-  
-  Postbox_writeFile: function Pb_writeFile(bookmarks) {
-    const Ci = Components.interfaces,
-          Cc = Components.classes,
-					NSIFILE = Ci.nsILocalFile || Ci.nsIFile;
-    
-    let dirService = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties),
-        file = dirService.get("ProfD", NSIFILE),
-        entity = bookmarks.Entries.length ? bookmarks.Entries : '',
-        outString = JSON.stringify(entity, null, '  '); // prettify
-    
-    file.append("extensions");
-    file.append("quickFoldersBookmarks.json");
-
-    // Initialize the file output stream.
-    let ostream = Cc["@mozilla.org/network/safe-file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
-    ostream.init(file, 
-                 0x02 | 0x08 | 0x20,   // write-only,create file, reset if exists
-                 0x600,   // read+write permissions
-                 ostream.DEFER_OPEN); 
-
-    // Obtain a converter to convert our data to a UTF-8 encoded input stream.
-    let converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
-    converter.charset = "UTF-8";
-
-    // Asynchronously copy the data to the file.
-    let istream = converter.convertToInputStream(outString); // aData
-    NetUtil.asyncCopy(istream, ostream, function(rc) {
-      if (Components.isSuccessCode(rc)) {
-        // Services.obs.notifyObservers(null, "sessionstore-state-write-complete", "");
-        // do something for success
-      }
-    });
-  } ,
-  
-  Postbox_readFile: function Pb_readFile() {
-    const Ci = Components.interfaces,
-          Cc = Components.classes,
-					NSIFILE = Ci.nsILocalFile || Ci.nsIFile;
-    let dirService = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties),
-        file = dirService.get("ProfD", NSIFILE);
-    file.append("extensions");
-    file.append("quickFoldersBookmarks.json");
-          
-    let fstream = Cc["@mozilla.org/network/file-input-stream;1"].
-                  createInstance(Ci.nsIFileInputStream);
-    fstream.init(file, -1, 0, 0);
-
-    let cstream = Cc["@mozilla.org/intl/converter-input-stream;1"].
-                  createInstance(Ci.nsIConverterInputStream);
-    cstream.init(fstream, "UTF-8", 0, 0);
-
-    let string  = {};
-    cstream.readString(-1, string);
-    cstream.close();
-    return string.value;    
   }
+  
+  
 };

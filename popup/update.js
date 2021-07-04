@@ -9,11 +9,9 @@ END LICENSE BLOCK */
 
 addEventListener("click", async (event) => {
 	if (event.target.id.startsWith("register") || event.target.id == 'bargainIcon') {
-    messenger.Utilities.openLinkExternally("https://sites.fastspring.com/quickfolders/product/quickfolders?referrer=landing-update");    
+    messenger.windows.openDefaultBrowser("https://sites.fastspring.com/quickfolders/product/quickfolders?referrer=landing-update");
 	}
   if (event.target.id=='whatsNew') {
-    const manifest = await messenger.runtime.getManifest(),
-          version = manifest.version;
     messenger.Utilities.showVersionHistory();
     
   }
@@ -23,7 +21,7 @@ addEventListener("click", async (event) => {
   }
 
 	if (event.target.id.startsWith("donate")) {
-	  messenger.Utilities.openLinkExternally("https://quickfolders.org/donate.html#donate");
+    messenger.windows.openDefaultBrowser("https://quickfolders.org/donate.html#donate");
 	}
 });
 
@@ -117,8 +115,7 @@ addEventListener("load", async (event) => {
            
     updateActions(addonName);
 
-    addAnimation('body');
-
+    // addAnimation('body');
   });  
 
   addEventListener("unload", async (event) => {

@@ -28,10 +28,27 @@ QuickFolders.AdvancedTab = {
     return false;
   } ,
   
-  load: function load() {
-		const util = this.MainQuickFolders.Util,
-		      ADVANCED_FLAGS = this.ADVANCED_FLAGS || util.ADVANCED_FLAGS;
+  updatePremiumFeatures: function() {
+    let isPremium = (QuickFolders.Util.hasPremiumLicense());
+    let isRecursive = document.getElementById('chkComposerSubFolders');
+    
+    isRecursive.disabled = !isPremium;
+    let proImg1 = document.getElementById('proRecursiveIcon'),
+        theText = QuickFolders.Util.getBundleString("qf.notification.premium.text",
+            "{1} is a Premium feature, please get a QuickFolders Pro License for using it permanently.");
+    proImg1.collapsed = isPremium;
+    proImg1.setAttribute('tooltiptext', theText.replace ("{1}", "[" + isRecursive.label + "]"));    
+  },
+  
+  load: async function load() {
     let dropdownCount = 0;
+    // get important state info from background
+    await QuickFolders.Util.init();
+    // add an event listener for changes:
+    window.addEventListener("QuickFolders.BackgroundUpdate", this.updatePremiumFeatures.bind(this));
+    
+		const util = QuickFolders.Util,
+		      ADVANCED_FLAGS = this.ADVANCED_FLAGS || util.ADVANCED_FLAGS;
 		
     function appendIdentity(dropdown, id, account) {
       try {
@@ -106,15 +123,8 @@ QuickFolders.AdvancedTab = {
       }
 			// apply email settings to all child folders
 			isRecursive.checked = (entry.flags & ADVANCED_FLAGS.EMAIL_RECURSIVE) && true;
-			if (!util.hasPremiumLicense(false)) {
-				isRecursive.disabled = true;
-				let proImg1 = elem('proRecursiveIcon'),
-				    theText=util.getBundleString("qf.notification.premium.text",
-				        "{1} is a Premium feature, please get a QuickFolders Pro License for using it permanently.");
-				proImg1.collapsed = false;
-				proImg1.setAttribute('tooltiptext', theText.replace ("{1}", "[" + isRecursive.label + "]"));
-			}
     }
+    this.updatePremiumFeatures();
 		// Addressing
 		// iterate accounts for From Address dropdown
 		let cboIdentity = elem('mailIdentity'),
@@ -142,10 +152,7 @@ QuickFolders.AdvancedTab = {
 			}  
 		}
 		
-		if (entry.fromIdentity) 
-			cboIdentity.value = entry.fromIdentity;
-		else
-			cboIdentity.value = 'default'; // default - no identity, so default is chosen.
+    cboIdentity.value = entry.fromIdentity || 'default'; // default - no identity, so default is chosen.
 
 		elem('txtToAddress').value = entry.toAddress ? entry.toAddress : '';
     
@@ -156,7 +163,12 @@ QuickFolders.AdvancedTab = {
     tabHeader.setAttribute('description', entry.name); // not working anymore, dialogheader is not displayed
 		tabHeader.setAttribute('tooltiptext', 'URI: ' + this.folder ? this.folder.URI : QuickFolders.AdvancedTab.folder.URI);
 		tabName.value = entry.name;
-		
+    
+    // [mx-l10n]
+    QuickFolders.Util.localize(window, {
+      extra1: "btnApply", 
+      extra2: "btnReset",
+    });
 		this.updateCSSpreview();
     
     // we wait as the width isn't correct on load
@@ -165,7 +177,8 @@ QuickFolders.AdvancedTab = {
     setTimeout(
       function () {   
 			  QuickFolders.AdvancedTab.resize(win); 
-			});
+			}
+    );
   } ,
   
   close: function() {
@@ -251,7 +264,7 @@ QuickFolders.AdvancedTab = {
 		
     // refresh the model
     // QuickFolders.Interface.updateFolders(false, true);
-    QuickFolders.Interface.updateMainWindow();
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" }); // QuickFolders.Interface.updateMainWindow();
     this.MainQuickFolders.Model.store(); 
 		this.updateCSSpreview();
   } ,
@@ -377,3 +390,9 @@ QuickFolders.AdvancedTab = {
     
 }  // AdvancedTab
 
+// initialize the dialog and do l10n
+window.document.addEventListener('DOMContentLoaded', 
+  QuickFolders.AdvancedTab.load.bind(QuickFolders.AdvancedTab) , 
+  { once: true });
+  
+  
