@@ -29,7 +29,7 @@
     "message": "Ik wil mijn licentie verlengen"
   },
   "btn-want-a-license": {
-    "message": "Ik wil een vergunning kopen"
+    "message": "Kies een licentie"
   },
   "btn-want-to-donate": {
     "message": "Ik wil helpen met een eenmalige donatie."
@@ -55,8 +55,14 @@
   "buyLicense.instruct": {
     "message": "Hebt u een licentie voor uzelf nodig? Neem een persoonlijke licentie. Deze is aan uw persoonlijke e-mailadres gekoppeld en kan bij verschillende installaties worden gebruikt."
   },
-  "buyPersonalLicense.button": {
-    "message": "Een persoonlijke licentie kopen!"
+  "buyProLicense.button": {
+    "message": "Koop Pro-licentie!"
+  },
+  "buyStandardLicense.button": {
+    "message": "Standaardlicentie kopen!"
+  },
+  "buyStandardLicense.instruct": {
+    "message": "Kunt u zich de premiumfuncties niet veroorloven? Koop dan een betaalbare standaardlicentie en blijf de premiumfuncties uitproberen."
   },
   "chkComposerSubfolders": {
     "message": "Ook op submappen toepassen"
@@ -157,7 +163,7 @@
     "message": "Standaardidentiteit bij het opstellen van e-mails"
   },
   "getQuickFolders": {
-    "message": "QuickFolders Pro kopen"
+    "message": "QuickFolders-licenties"
   },
   "grpComposer": {
     "message": "Standaard-e-mailvelden"
@@ -210,8 +216,41 @@
     "description": "Shown if license expires more than a year from now",
     "message": "Bedankt voor het onlangs verlengen van uw licentie of als u heeft gedoneerd. Omdat u heeft geholpen om deze add-on toekomstbestendig te maken, kunt u dit venster eenvoudig sluiten."
   },
+  "licenseComparison" : {
+    "message": "Om de kenmerken van de verschillende versies te vergelijken, {linkStart}lees deze lijst{linkEnd}."
+  },  
+  "licenseHead": {
+    "message": "Nieuw licentiesysteem"
+  },  
+  "licenseTypes": {
+    "message": "QuickFolders biedt twee licenties, Standard en Pro; deze zijn nodig om de veranderingen in het Thunderbird-platform bij te houden en om Innovaties en reparaties van de Add-on te financieren. Omdat wijzigingen die mogelijk de extensiefunctionaliteit verbreken jaarlijks worden uitgerold, is de licentie ook 1 jaar geldig."
+  },  
   "licenseWindow.title": {
     "message": "QuickFolders Pro-licentie"
+  },
+  "license_restriced.std": {
+    "message": "Standaardlicentie - beperkte Pro-functie. Meer te weten komen…"
+  },
+  "license_restriced.unpaid": {
+    "message": "Versie zonder licentie - beperkte functie. Meer te weten komen…"
+  },
+  "license_restriced.standard.maxtabs": {
+    "message": "QuickFolders heeft een Pro-licentie nodig om meer dan $maxTabs$ tabbladen te ondersteunen.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "license_restriced.unpaid.maxtabs": {
+    "message": "QuickFolders heeft een licentie nodig om meer dan $maxTabs$ tabbladen te ondersteunen.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "mozillas-basic-platform": {
     "message": "Mozilla biedt alleen een basisplatform om onze software aan u, de eindgebruikers, te leveren. Als we onze gebruikers om betaling of ondersteuning moeten vragen, kunnen we dit niet doen vanaf addons.thunderbird.net - het is geen 'app store' met ingebouwde paywalls of licentiebeheer zoals iTunes of Google Play."
@@ -228,9 +267,6 @@
         "example": "QuickFolders"
       }
     }
-  },
-  "on-permissions": {
-    "message": "BELANGRIJK: Automatische updates vragen u mogelijk niet om te installeren wanneer een nieuwe Add-on-versie aanvullende machtigingen vereist. In plaats daarvan ziet u dit waarschuwingspictogram op de Thunderbird-hoofdmenuknop, waarop u moet klikken om de update te voltooien. Voor het migreren naar het nieuwe uitbreidingssysteem is het aanvragen van machtigingen vereist. Anders kunnen we geen bugfixes / nieuwe functies leveren!"
   },
   "purchase-a-license": {
     "message": "Koop een licentie."
@@ -313,11 +349,11 @@
   "qf.checkbox.autoFocusPreview": {
     "message": "Focus op berichtenlijst leggen bij wisselen van tabblad"
   },
-  "qf.checkbox.autoHideToolbar": {
-    "message": "QuickFolders verbergen wanneer onnodig"
+  "qf.checkbox.hideInSingleMessage": {
+    "message": "Verberg QuickFolders in tabbladen met één bericht"
   },
-  "qf.checkbox.autoHideToolbar.tooltip": {
-    "message": "Vouwt de werkbalk samen in speciale tabbladen zoals agenda, inhoud, add-onbeheerder."
+  "qf.checkbox.hideInSingleMessage.tooltip": {
+    "message": "Verwijdert de QuickFolders-werkbalk in tabbladen die een enkel bericht tonen."
   },
   "qf.checkbox.currentFolder.closeButton": {
     "message": "Knop Sluiten"
@@ -541,6 +577,9 @@
   "qf.copyfolders.tooltip": {
     "message": "De configuratie van QuickFolders-tabbladen naar het klembord kopiëren"
   },
+  "qf.currentFolderBackground.lightweight": {
+    "message": "Thunderbird-thema"
+  },
   "qf.currentFolderBackground.custom": {
     "message": "aangepast"
   },
@@ -548,7 +587,7 @@
     "message": "donker"
   },
   "qf.currentFolderBackground.default": {
-    "message": "standaard"
+    "message": "zilver"
   },
   "qf.currentFolderBackground.translucent": {
     "message": "doorschijnend"
@@ -900,6 +939,9 @@
   "qf.licenseValidation.passed": {
     "message": "Bedankt voor uw registratie van QuickFolders Pro! Alle premiumfuncties kunnen nu worden gebruikt."
   },
+  "qf.licenseValidation.standard": {
+    "message": "Bedankt voor het registreren van een QuickFolders-licentie - u helpt de add-on enorm! Als u meer functies nodig heeft, kunt u altijd upgraden naar de Pro-licentie."
+  },  
   "qf.loadConfig": {
     "message": "Configuratie laden…"
   },
@@ -985,7 +1027,7 @@
     "message": "Dit bericht niet meer tonen"
   },
   "qf.notification.newsFlash": {
-    "message": "$addonName$ is bijgewerkt! Zie wat nieuw is…",
+    "message": "$addonName$ is bijgewerkt! Belangrijk nieuws…",
     "placeholders": {
       "addonName": {
         "content": "$1",
@@ -1008,17 +1050,46 @@
   "qf.notification.premium.btn.renewLicense": {
     "message": "Licentie vernieuwen"
   },
+  "qf.notification.premium.btn.upgrade": {
+    "message": "Upgraden naar Pro"
+  },
   "qf.notification.premium.readingList": {
     "message": "U hebt nu {1} bladwijzers gedefinieerd. De gratis versie van QuickFolders staat maximaal {2} bladwijzers toe."
   },
+  "qf.notification.premium.shortcut": {
+    "message": "De premium-licentie geeft u bovendien een configureerbare sneltoets."
+  },
   "qf.notification.premium.tabIcons": {
-    "message": "U hebt nu {1} pictogrammen gedefinieerd. De gratis versie van QuickFolders staat maximaal {2} bladwijzers toe."
+    "message": "U gebruikt nu $cntIcons$ aangepaste pictogrammen voor tabbladen. De gratis versie van QuickFolders ondersteunt maximaal $maxFreeIcons$. De standaardlicentie ondersteunt $maxStdIcons$. QuickFolders Pro heeft geen limiet.",
+    "placeholders": {
+      "cntIcons": {
+        "content": "$1",
+        "example": "10"
+      },
+      "maxFreeIcons": {
+        "content": "$2",
+        "example": "5"
+      },
+      "maxStdIcons": {
+        "content": "$3",
+        "example": "12"
+      }
+    }   
   },
   "qf.notification.premium.text": {
-    "message": "{1} is een Premium-functie; registreer QuickFolders om deze permanent te gebruiken."
+    "message": "{1} is een Premium-functie, vraag een QuickFolders Pro-licentie aan om deze te gebruiken."
   },
   "qf.notification.premium.title": {
     "message": "Premium-functie"
+  },
+  "qf.notification.standard.readingList": {
+    "message": "U heeft nu {1} bladwijzers gedefinieerd. De standaardlicentie van QuickFolders staat maximaal {2} toe."
+  },
+  "qf.notification.standard.text": {
+    "message": "{1} is een functie met beperkte licentie. Vraag een QuickFolders-licentie aan om deze te gebruiken."
+  },
+  "qf.notification.standard.title": {
+    "message": "Standaardfunctie"
   },
   "qf.options.LayoutColorAppearance": {
     "message": "Individuele tabbladkleurweergave"
@@ -1171,7 +1242,7 @@
     "message": "Algemeen"
   },
   "qf.tab.gopro": {
-    "message": "QuickFolders Pro"
+    "message": "Licenties"
   },
   "qf.tab.layout": {
     "message": "Bling mijn tabbladen!"
@@ -1639,7 +1710,33 @@
     "message": "Verleng uw licentie."
   },
   "special-offer-content": {
-    "message": "Bescherm QuickFolders voor de naderende Thunderbird-versie 91 en bespaar {boldStart}40%{boldEnd} door een licentie te kopen! Deze speciale aanbieding is geldig tot {boldStart}18 juli{boldEnd}."
+    "message": "Upgrade uw functies en bespaar {boldStart}$reduction${boldEnd} door een QuickFolders Pro-licentie te kopen! Deze speciale aanbieding is geldig tot {boldStart}$expirydate${boldEnd}. Of kies voor de standaardfuncties met de nieuwe {linkStart}Standaardlicentie{linkEnd}.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "22 augustus"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "30%"
+      }
+    }
+  },
+  "special-offer-upgrade": {
+    "message": "Upgrade nu van QuickFolders Standard naar Pro en bespaar {boldStart}$reduction${boldEnd}! Deze speciale aanbieding is geldig tot {boldStart}$expirydate${boldEnd}.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "September 11"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "50%"
+      }
+    }
+  }, 
+  "special-offer-expiry": {
+    "message": "11 september"    
   },
   "special-offer-head": {
     "message": "Maak QuickFolders toekomstbestendig!"
@@ -1724,7 +1821,7 @@
     "message": "Lees hier het gedetailleerde wijzigingslogboek (alleen in het Engels):"
   },
   "whats-new-list": {
-    "message": "{L1}Aanzienlijke nieuwe zoekfuncties zijn toegevoegd aan de quickMove / quickJump-functie. Klik voor hulp hierbij op het [?]-symbool rechts van het zoekveld.{L2}{L1}U kunt dit scherm nu openen vanuit het menu QuickFolders-hulpmiddelen.{L2}{L1}Verbeterde ondersteuning voor meerdere Thunderbird-vensters.{L2}{L1}Verbeterde leesbaarheid van werkbalken onder Linux{L2}{L1} [migratie van e-mailextensie] Licentiebibliotheek is gemigreerd naar achtergrondscript. Als u problemen ondervindt met betrekking tot licenties, neem dan contact met mij op via het tabblad Ondersteuning!{L2}"
+    "message": "{L1}Opgelost in 5.7.2: wanneer quickFilters zijn assistent activeert, zijn alle pictogrammen links van de tabbladen wit{L2} {L1}Opgelost in 5.7.1: Bij het zoeken naar mappen met de syntaxis 'bovenliggende map/bovenliggende map/gewenste map' werd geen rekening gehouden met bovenliggende mappen met namen met één tekenlengte. {L2} {L1}QuickFolders compatibel gemaakt met Thunderbird 91.{L2}{L1}Verbeterde ondersteuning voor donkere thema's en thema's van derden, zowel in het optiescherm als voor de navigatiewerkbalk.{L2}{L1}Verbeterde zichtbaarheid van de knop [wat is er nieuw] met niet -standaard QuickFolders-thema{L2}{L1}Opgelost: soms werd de sessie gereset bij het opnieuw opstarten of na het installeren van andere add-ons of updates, zodat alle categorieën werden weergegeven.{L2}"
   },
   "window-title": {
     "description": "page title. first placeholder will be replaced with Add-on name",

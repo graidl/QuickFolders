@@ -8,7 +8,8 @@
   END LICENSE BLOCK */
 
  
-var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm');
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm"); 
 
 var QuickFolders_ConsoleService = null;
 
@@ -294,62 +295,87 @@ QuickFolders.Util = {
   onCloseNotification: function onCloseNotification(eventType, notifyBox, notificationKey) {
     QuickFolders.Util.logDebug ("onCloseNotification(" + notificationKey + ")");
     window.setTimeout(function() {
-    // Postbox doesn't tidy up after itself?
-    if (!notifyBox)
-      return;
-    let item = notifyBox.getNotificationWithValue(notificationKey);
-    if(item) {
-      // http://mxr.mozilla.org/mozilla-central/source/toolkit/content/widgets/notification.xml#164
-      notifyBox.removeNotification(item, false);   // skipAnimation
-    }
-      }, 200);
+      // Postbox doesn't tidy up after itself?
+      if (!notifyBox)
+        return;
+      let item = notifyBox.getNotificationWithValue(notificationKey);
+      if(item) {
+        // http://mxr.mozilla.org/mozilla-central/source/toolkit/content/widgets/notification.xml#164
+        notifyBox.removeNotification(item, false);   // skipAnimation
+      }
+    }, 200);
   } ,
   
   // goal - take validation out and put it into an async function
   
-  hasPremiumLicense: function hasPremiumLicense() {
+  hasValidLicense: function hasValidLicense() {
     return true;  // GR
     if (!QuickFolders.Util.licenseInfo) return false;
     return QuickFolders.Util.licenseInfo.status == "Valid";
   },
   
-  popupProFeature: function popupProFeature(featureName, text) {
-    let notificationId,
-        notifyBox,
+  hasStandardLicense: function() {
+    if (!QuickFolders.Util.licenseInfo) return false;
+    return (QuickFolders.Util.licenseInfo.keyType==2);
+  },
+  
+  /*
+   * popupRestrictedFeature() 
+   * show a notification in main window with feature specific text and link to registration screen
+   * @featureName - keyword, used for referrer!
+   * @text - [optional] additional text
+   * @level: 0 pro, 1 domain, 2 standard. defaults to pro feature
+   */
+  popupRestrictedFeature: async function popupRestrictedFeature(featureName, text, level = 0) {
+    let notifyBox,
         util = QuickFolders.Util,
         prefs = QuickFolders.Preferences,
-        maindoc = util.getMail3PaneWindow().document;
-    if (util.hasPremiumLicense())
-      return;
-    util.logDebugOptional("premium", "popupProFeature(" + featureName + ", " + text + ")");
+        maindoc = util.getMail3PaneWindow().document,
+        licenseInfo = util.licenseInfo,
+        levelSelect = (level==2) ? "standard" : "premium";
+    if (util.hasValidLicense()) {
+      switch (level) {
+        case 0:  // premium feature
+          if (licenseInfo.keyType == 0 || licenseInfo.keyType == 1) return;
+          break;
+        case 1:  // domain feature (future usage)
+          if (licenseInfo.keyType == 1) return;
+          break;
+        case 2:  // standard feature
+          if (licenseInfo.keyType >= 0) return;
+          break;
+      }
+    }
+    
     // is notification disabled?
-    // check setting extensions.quickfolders.proNotify.<featureName>
-    let usage = prefs.getIntPref("premium." + featureName + ".usage");
-    usage++;
-    prefs.setIntPref("premium." + featureName + ".usage", usage);
-    notificationId = 'mail-notification-box';
+    try {
+      util.logDebugOptional("premium", `popupRestrictedFeature(${featureName}, ${text}, ${level})`);
+      
+      // log setting extensions.quickfolders.proNotify.<featureName>
+      let usage = prefs.getIntPref("premium." + featureName + ".usage");
+      usage++;
+      prefs.setIntPref("premium." + featureName + ".usage", usage);
+    } catch(e) {;}
     
     if (typeof specialTabs == 'object' && specialTabs.msgNotificationBar) { // Tb 68
       notifyBox = specialTabs.msgNotificationBar;
     }
-    else {
-      notifyBox = maindoc.getElementById (notificationId);
-      if (notifyBox)
-        util.logDebugOptional("premium", "notificationId = " + notificationId + ", found" + notifyBox);
-    }
-    let title=util.getBundleString("qf.notification.premium.title", "Premium Feature"),
-        theText=util.getBundleString("qf.notification.premium.text",
-                "{1} is a Premium feature, please get a QuickFolders Pro License for using it permanently.");
+    let title = util.getBundleString(`qf.notification.${levelSelect}.title`),
+        theText = util.getBundleString(`qf.notification.${levelSelect}.text`);
     theText = theText.replace ("{1}", "'" + featureName + "'");
     if (text)
       theText = theText + '  ' + text;
     
-    let regBtn = util.getBundleString("qf.notification.premium.btn.getLicense", "Buy License!"),
-        hotKey = util.getBundleString("qf.notification.premium.btn.hotKey", "L"),
+    
+    let regBtn = util.getBundleString("qf.notification.premium.btn.getLicense"),
+        hotKey = util.getBundleString("qf.notification.premium.btn.hotKey"),
         nbox_buttons;
     // overwrite for renewal
     if (QuickFolders.Util.licenseInfo.isExpired)
-        regBtn = util.getBundleString("qf.notification.premium.btn.renewLicense", "Renew License!");
+      regBtn = util.getBundleString("qf.notification.premium.btn.renewLicense");
+    else if (licenseInfo.keyType == 2) { // overwrite for upgrade
+      regBtn = util.getBundleString("qf.notification.premium.btn.upgrade");
+    }
     if (notifyBox) {
       let notificationKey = "quickfolders-proFeature";
       util.logDebugOptional("premium", "configure buttons…");
@@ -373,11 +399,34 @@ QuickFolders.Util = {
       }
     
       util.logDebugOptional("premium", "notifyBox.appendNotification()…");
-      notifyBox.appendNotification( theText, 
-          notificationKey , 
-          "chrome://quickfolders/content/skin/ico/proFeature.png" , 
+      const imgSrc = "chrome://quickfolders/content/skin/ico/proFeature.png";
+      let newNotification = 
+        notifyBox.appendNotification( theText, 
+          notificationKey, 
+          imgSrc, 
           notifyBox.PRIORITY_INFO_HIGH, 
-          nbox_buttons ); // , eventCallback
+          nbox_buttons ); 
+          
+      // setting img was removed in Tb91  
+      if (newNotification.messageImage.tagName == "span") {
+        // style needs to go into shadowroot
+        let linkEl = document.createElement("link");
+        linkEl.setAttribute("rel", "stylesheet");
+        linkEl.setAttribute("href", "chrome://quickfolders-skins/content/qf-notifications.css");
+        newNotification.shadowRoot.insertBefore(linkEl, newNotification.shadowRoot.firstChild.nextSibling); 
+        
+        let container = newNotification.shadowRoot.querySelector(".container");
+        if (container) {
+          let im = document.createElement("img");
+          im.setAttribute("src", imgSrc);
+          im.classList.add("messageImage");
+          // replace the standard "warning" icon:
+          let standardIcon = newNotification.shadowRoot.querySelector(".icon");
+          container.insertBefore(im, standardIcon);
+          container.removeChild(standardIcon);
+        }
+        
+      }          
     }
     else {
       // code should not be called, on SM we would have a sliding notification for now
@@ -777,7 +826,10 @@ QuickFolders.Util = {
       }
       
       step = 5;
-      let cs = Components.classes["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService);
+      
+      const cs = MailServices.copy  // Tb91
+        || Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService); // older
+        
       step = 6;
       targetFolder = targetFolder.QueryInterface(Ci.nsIMsgFolder);
       step = 7;
@@ -792,7 +844,13 @@ QuickFolders.Util = {
         'window = ' + mw + '\n' +
         'allowUndo = true)'); 
       let currentTab = tabmail.selectedTab;
-      cs.CopyMessages(sourceFolder, messageList, targetFolder, isMove, QuickFolders.CopyListener, mw, true);
+      
+
+      if (cs.copyMessages)
+        cs.copyMessages(sourceFolder, messageList, targetFolder, isMove, QuickFolders.CopyListener, mw, true);
+      else
+        cs.CopyMessages(sourceFolder, messageList, targetFolder, isMove, QuickFolders.CopyListener, mw, true);
+      
       step = 8;
       util.touch(targetFolder); // set MRUTime
       if (moveFromSingleMailTab && currentTabId>0 && !QuickFolders.quickMove.Settings.isGoNext) {
@@ -974,13 +1032,12 @@ QuickFolders.Util = {
     if (aEvent.originalTarget.localName != "toolbarbutton")
       return;
     
-    let messages = this.getSelectedMsgUris();
-    if (!messages) return;
+    let messageUris = this.getSelectedMsgUris();
+    if (!messageUris) return;
     let ios = Components.classes["@mozilla.org/network/io-service;1"]
               .getService(Components.interfaces.nsIIOService),
         newUF = (typeof Set !== 'undefined'),
         fileNames = newUF ? new Set() : [],
-        msgUrls = {},
         uniqueFileName = '',
         count = 0;
 
@@ -988,10 +1045,21 @@ QuickFolders.Util = {
     // currently work, pending core fixes for
     // multiple-drop-on-desktop support. (bug 513464)
     let summary = '';
-    for (let i in messages) {
-      let message = messages[i];
+    for (let i in messageUris) {
+      let message = messageUris[i];
+      let msgUrl;
       // copy message URLs:
-      messenger.messageServiceFromURI(message).GetUrlForUri(message, msgUrls, null);
+      let msgService = messenger.messageServiceFromURI(message),
+          spec;
+      if (msgService.getUrlForUri) { // Tb91
+        msgUrl = msgService.getUrlForUri(message);
+        spec = msgUrl.spec;
+      }
+      else { // Tb78
+        msgUrl = {};
+        msgService.GetUrlForUri(message, msgUrl, null);
+        spec = msgUrl.value.spec;
+      }
       aEvent.dataTransfer.mozSetDataAt("text/x-moz-message", message, i);
       let header = messenger.messageServiceFromURI(message).messageURIToMsgHdr(message),
           subject = header.mime2DecodedSubject;
@@ -1000,9 +1068,9 @@ QuickFolders.Util = {
         this.suggestUniqueFileName_Old(subject.substr(0,124), ".eml", fileNames);
       fileNames.add(uniqueFileName);
       try {
-        aEvent.dataTransfer.mozSetDataAt("text/x-moz-url", msgUrls.value.spec, i);
+        aEvent.dataTransfer.mozSetDataAt("text/x-moz-url", spec, i);
         aEvent.dataTransfer.mozSetDataAt("application/x-moz-file-promise-url", 
-                                         msgUrls.value.spec + "&fileName=" + 
+                                         spec + "&fileName=" + 
                                          uniqueFileName, i);
         aEvent.dataTransfer.mozSetDataAt("application/x-moz-file-promise", null, i);
         count++;
@@ -1216,13 +1284,17 @@ QuickFolders.Util = {
   // appends user=pro OR user=proRenew if user has a valid / expired license
   makeUriPremium: function makeUriPremium(URL) {
     const util = QuickFolders.Util,
-          isPremiumLicense = util.hasPremiumLicense() || QuickFolders.Util.licenseInfo.isExpired;
+          isPremiumLicense = util.hasValidLicense() || QuickFolders.Util.licenseInfo.isExpired;
     try {
       let uType = "";
       if (QuickFolders.Util.licenseInfo.isExpired) 
         uType = "proRenew"
-      else if (util.hasPremiumLicense())
-        uType = "pro";
+      else if (util.hasValidLicense()) {
+        if (util.hasStandardLicense())
+          uType = "std";
+        else
+          uType = "pro";
+      }
       // make sure we can sanitize all pages for our premium users!
       if (   uType
           && URL.indexOf("user=")==-1 
@@ -1275,7 +1347,7 @@ QuickFolders.Util = {
     }
   },
 
-  getBundleString: function getBundleString(id, defaultText, substitions = []) { // moved from local copies in various modules.
+  getBundleString: function getBundleString(id, substitions = []) { // moved from local copies in various modules.
     // [mx-l10n]
     var { ExtensionParent } = ChromeUtils.import("resource://gre/modules/ExtensionParent.jsm");
     let extension = ExtensionParent.GlobalManager.getExtension('quickfolders@curious.be');
@@ -1300,8 +1372,10 @@ QuickFolders.Util = {
     );
     window.i18n.updateDocument({extension: QuickFolders.Util.extension});
     if (buttons) {
+      let dialog = document.getElementsByTagName("dialog")[0];
       for (let [name, label] of Object.entries(buttons)) {
-        window.document.documentElement.getButton(name).label =  QuickFolders.Util.extension.localeData.localizeMessage(label); // apply
+        // window.document.documentElement
+        dialog.getButton(name).label =  QuickFolders.Util.extension.localeData.localizeMessage(label); // apply
       }
     }
   } ,
@@ -1643,7 +1717,7 @@ QuickFolders.Util = {
           }
         }
         else {    
-          let isPremiumLicense = util.hasPremiumLicense() || QuickFolders.Util.licenseInfo.isExpired,
+          let isPremiumLicense = util.hasValidLicense() || QuickFolders.Util.licenseInfo.isExpired,
               versionPage = util.makeUriPremium("https://quickfolders.org/version.html") + "#" + pureVersion;
           // UPDATE CASE 
           // this section does not get loaded if it's a fresh install.
@@ -1715,7 +1789,6 @@ QuickFolders.Util = {
   allFoldersIterator: function allFoldersIterator(writable, isQuickJumpOrMove = false) {
     let Ci = Components.interfaces,
         Cc = Components.classes,
-        {MailServices} = ChromeUtils.import("resource:///modules/MailServices.jsm"), // replace account-manager
         acctMgr = MailServices.accounts,
         FoldersArray, allFolders,
         util = QuickFolders.Util,
@@ -1734,12 +1807,12 @@ QuickFolders.Util = {
     }
     
     // toXPCOMArray(allFolders, Ci.nsIMutableArray) ? 
-    var { fixIterator } = ChromeUtils.import('resource:///modules/iteratorUtils.jsm');
+    // var { fixIterator } = ChromeUtils.import('resource:///modules/iteratorUtils.jsm');
     
     if (acctMgr.allFolders) { // Thunderbird & modern builds
-      FoldersArray = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
+      FoldersArray = [];
       allFolders = acctMgr.allFolders;
-      for (let aFolder of fixIterator(allFolders, Ci.nsIMsgFolder)) {
+      for (let aFolder of allFolders) { // removed fixIterator in Tb91
         // filter out non-fileable folders (newsgroups...)
         if (writable && 
              (!aFolder.canFileMessages || 
@@ -1757,9 +1830,9 @@ QuickFolders.Util = {
             }
           }
         }
-        FoldersArray.appendElement(aFolder, false);
+        FoldersArray.push(aFolder);
       }          
-      return fixIterator(FoldersArray, Ci.nsIMsgFolder);
+      return FoldersArray; 
     }
     else { 
       util.logToConsole("Error: allFolders missing in MailServices.accounts!");
@@ -2017,7 +2090,25 @@ QuickFolders.Util = {
 
     // Finally, we have a valid folder. Return it.
     return folder;
-  }  
+  } ,
+  
+  compareVersions : function (a, b) {
+    var i, diff;
+    var regExStrip0 = /(\.0+)+$/;
+    b = b.toString();
+    var segmentsA = a.replace(regExStrip0, '').split('.');
+    var segmentsB = b.replace(regExStrip0, '').split('.');
+    var l = Math.min(segmentsA.length, segmentsB.length);
+
+    for (i = 0; i < l; i++) {
+        diff = parseInt(segmentsA[i], 10) - parseInt(segmentsB[i], 10);
+        if (diff) {
+            return diff;
+        }
+    }
+    return segmentsA.length - segmentsB.length;
+  }
+
   
   
 };  // QuickFolders.Util
@@ -2028,8 +2119,6 @@ QuickFolders.Util = {
 
 Object.defineProperty(QuickFolders.Util, "Accounts",
 { get: function() {
-    var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm"); // replace account-manager
-    
     let acMgr = MailServices.accounts,
         aAccounts = [];
         

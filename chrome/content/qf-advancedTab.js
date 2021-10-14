@@ -29,13 +29,16 @@ QuickFolders.AdvancedTab = {
   } ,
   
   updatePremiumFeatures: function() {
-    let isPremium = (QuickFolders.Util.hasPremiumLicense());
+    let hasLicense = QuickFolders.Util.hasValidLicense();
+    let isPremium = (hasLicense && !QuickFolders.Util.hasStandardLicense());
     let isRecursive = document.getElementById('chkComposerSubFolders');
+    
+    document.getElementById("mailIdentity").disabled = !hasLicense;
+    document.getElementById("txtToAddress").disabled = !hasLicense;
     
     isRecursive.disabled = !isPremium;
     let proImg1 = document.getElementById('proRecursiveIcon'),
-        theText = QuickFolders.Util.getBundleString("qf.notification.premium.text",
-            "{1} is a Premium feature, please get a QuickFolders Pro License for using it permanently.");
+        theText = QuickFolders.Util.getBundleString("qf.notification.premium.text");
     proImg1.collapsed = isPremium;
     proImg1.setAttribute('tooltiptext', theText.replace ("{1}", "[" + isRecursive.label + "]"));    
   },

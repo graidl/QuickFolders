@@ -29,7 +29,7 @@
     "message": "我想续签我的许可证"
   },
   "btn-want-a-license": {
-    "message": "我想购买许可证"
+    "message": "选择许可证"
   },
   "btn-want-to-donate": {
     "message": "我想提供一次捐款。"
@@ -55,8 +55,14 @@
   "buyLicense.instruct": {
     "message": "只需要为自己授权？获取单用户授权吧。它绑定到您的个人电子邮件地址，并可在多处安装。"
   },
-  "buyPersonalLicense.button": {
-    "message": "购买个人授权！"
+  "buyProLicense.button": {
+    "message": "购买专业版许可证！"
+  },
+  "buyStandardLicense.button": {
+    "message": "购买标准许可证！"
+  },
+  "buyStandardLicense.instruct": {
+    "message": "买不起高级功能？ 获得高价格的标准许可证并继续测试高级功能。"
   },
   "chkComposerSubfolders": {
     "message": "也适用于子文件夹"
@@ -157,7 +163,7 @@
     "message": "定义撰写邮件的身份"
   },
   "getQuickFolders": {
-    "message": "获取 QuickFolders Pro"
+    "message": "QuickFolders 许可证"
   },
   "grpComposer": {
     "message": "定义邮件字段"
@@ -210,8 +216,41 @@
     "description": "Shown if license expires more than a year from now",
     "message": "感谢您最近延长许可证或捐赠。 当您帮助将来对该插件进行验证时，只需关闭此窗口即可。"
   },
+  "licenseComparison" : {
+    "message": "要比较不同版本的功能，请{linkStart}阅读此列表{linkEnd}。"
+  },  
+  "licenseHead": {
+    "message": "新的许可制度"
+  },  
+  "licenseTypes": {
+    "message": "QuickFolders 提供两种许可证，Standard 和 Pro； 这些对于跟上 Thunderbird 平台的变化以及为插件的创新和修复提供资金是必要的。 由于可能破坏扩展功能的更改每年都会部署，因此许可证的有效期也为 1 年。"
+  },  
   "licenseWindow.title": {
     "message": "QuickFolders Pro 授权"
+  },
+  "license_restriced.std": {
+    "message": "标准许可证 - 受限 Pro 功能。 了解更多…"
+  },
+  "license_restriced.unpaid": {
+    "message": "未授权版本 - 受限功能。 了解更多…"
+  },
+  "license_restriced.standard.maxtabs": {
+    "message": "QuickFolders 需要 Pro 许可证才能支持多个 $maxTabs$ 选项卡。",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "license_restriced.unpaid.maxtabs": {
+    "message": "QuickFolders 需要一个许可证来支持多个 $maxTabs$ 选项卡。",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "mozillas-basic-platform": {
     "message": "Mozilla仅提供了一个向您（最终用户）交付我们软件的基本平台。 如果我们需要向我们的用户付款或提供支持，则不能通过addons.thunderbird.net进行操作-这不是内置付费界面或许可证管理（如iTunes或Google Play）的“应用商店”。"
@@ -228,9 +267,6 @@
         "example": "QuickFolders"
       }
     }
-  },
-  "on-permissions": {
-    "message": "重要提示：每当新的附加版本需要额外权限时，自动更新可能不会要求您安装。 相反，您将在 Thunderbird 主菜单按钮上看到此警告图标，您必须单击该按钮才能完成更新。 迁移到新的扩展系统需要请求权限。 否则我们无法提供任何错误修复/新功能！"
   },
   "purchase-a-license": {
     "message": "购买许可证。"
@@ -313,11 +349,11 @@
   "qf.checkbox.autoFocusPreview": {
     "message": "切换导航卡时将窗口焦点置于消息列表"
   },
-  "qf.checkbox.autoHideToolbar": {
-    "message": "自动隐藏工具栏"
+  "qf.checkbox.hideInSingleMessage": {
+    "message": "在单个消息选项卡中隐藏 QuickFolders"
   },
-  "qf.checkbox.autoHideToolbar.tooltip": {
-    "message": "使用特殊标签折叠工具栏（如日历，内容，插件管理）"
+  "qf.checkbox.hideInSingleMessage.tooltip": {
+    "message": "在显示单个消息的选项卡中删除 QuickFolders 工具栏。"
   },
   "qf.checkbox.currentFolder.closeButton": {
     "message": "关闭按钮"
@@ -541,6 +577,9 @@
   "qf.copyfolders.tooltip": {
     "message": "复制导航栏配置字符串到剪贴板"
   },
+  "qf.currentFolderBackground.lightweight": {
+    "message": "Thunderbird 主题"
+  },
   "qf.currentFolderBackground.custom": {
     "message": "自定义"
   },
@@ -548,7 +587,7 @@
     "message": "暗"
   },
   "qf.currentFolderBackground.default": {
-    "message": "默认"
+    "message": "银"
   },
   "qf.currentFolderBackground.translucent": {
     "message": "透明"
@@ -900,6 +939,9 @@
   "qf.licenseValidation.passed": {
     "message": "感谢您注册QuickFolders Pro！ 所有高级功能现已解锁."
   },
+  "qf.licenseValidation.standard": {
+    "message": "感谢您注册 QuickFolders 许可证 - 您正在极大地帮助附加组件！ 如果您需要更多功能，您可以随时升级到 Pro 许可证。"
+  },  
   "qf.loadConfig": {
     "message": "负载配置…"
   },
@@ -985,7 +1027,7 @@
     "message": "不要再显示此消息。"
   },
   "qf.notification.newsFlash": {
-    "message": "$addonName$ 已更新！ 看看有什么新鲜事……",
+    "message": "$addonName$ 已更新！ 重要消息……",
     "placeholders": {
       "addonName": {
         "content": "$1",
@@ -1008,17 +1050,46 @@
   "qf.notification.premium.btn.renewLicense": {
     "message": "续订许可证"
   },
+  "qf.notification.premium.btn.upgrade": {
+    "message": "升级到专业版"
+  },
   "qf.notification.premium.readingList": {
     "message": "现在，您已经定义了{1}个书签。 免费版本的QuickFolders最多允许{2}。"
   },
+  "qf.notification.premium.shortcut": {
+    "message": "高级许可证还为您提供了一个可配置的键盘快捷键。"
+  },
   "qf.notification.premium.tabIcons": {
-    "message": "You have now {1} icon(s) defined. The free version of QuickFolders allows a maximum of {2}."
+    "message": "您现在为选项卡使用 $cntIcons$ 自定义图标。 QuickFolders 的免費版本最多支持 $maxFreeIcons$。 標准許可證支持 $maxStdIcons$。 QuickFolders Pro 沒有限制。",
+    "placeholders": {
+      "cntIcons": {
+        "content": "$1",
+        "example": "10"
+      },
+      "maxFreeIcons": {
+        "content": "$2",
+        "example": "5"
+      },
+      "maxStdIcons": {
+        "content": "$3",
+        "example": "12"
+      }
+    }
   },
   "qf.notification.premium.text": {
-    "message": "{1}是一项高级功能，请永久使用QuickFolders Pro许可证。"
+    "message": "{1} 是一项高级功能，请获得 QuickFolders Pro 许可才能使用它。"
   },
   "qf.notification.premium.title": {
     "message": "高级功能"
+  },
+  "qf.notification.standard.readingList": {
+    "message": "您现在已经定义了 {1} 个书签。 QuickFolders 的标准许可最多允许 {2}。"
+  },
+  "qf.notification.standard.text": {
+    "message": "{1} 是一项许可限制功能，请获得 QuickFolders 许可才能使用它。"
+  },
+  "qf.notification.standard.title": {
+    "message": "标准功能"
   },
   "qf.options.LayoutColorAppearance": {
     "message": "导航卡独立的颜色外观"
@@ -1171,7 +1242,7 @@
     "message": "常规"
   },
   "qf.tab.gopro": {
-    "message": "QuickFolders Pro"
+    "message": "执照"
   },
   "qf.tab.layout": {
     "message": "外观"
@@ -1639,7 +1710,33 @@
     "message": "续订您的许可证。"
   },
   "special-offer-content": {
-    "message": "为即将推出的 Thunderbird 91 版保护 QuickFolders 并节省 {boldStart}40%{boldEnd} 购买许可证！ 此特别优惠将持续到 {boldStart}7 月 18 日{boldEnd}。"
+    "message": "通过购买 QuickFolders Pro 许可证升级您的功能并节省 {boldStart}$reduction${boldEnd}！ 此特别优惠将持续到 {boldStart}$expirydate${boldEnd}。 或者使用新的 {linkStart}Standard License{linkEnd} 选择标准功能。",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "4月16日"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "30%"
+      }
+    }
+  },
+  "special-offer-upgrade": {
+    "message": "立即从 QuickFolders Standard 升级到 Pro 并节省 {boldStart}$reduction${boldEnd}！ 此特别优惠将持续到 {boldStart}$expirydate${boldEnd}。",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "September 11"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "50%"
+      }
+    }
+  }, 
+  "special-offer-expiry": {
+    "message": "9月 11日"    
   },
   "special-offer-head": {
     "message": "使QuickFolders成为未来的证明！"
@@ -1724,7 +1821,7 @@
     "message": "在此处阅读详细的更改日志（仅英语）："
   },
   "whats-new-list": {
-    "message": "{L1}quickMove / quickJump 功能中添加了重要的新搜索功能。 如需这些方面的帮助，请点击搜索字段右侧的 [?] 符号。{L2}{L1}改进了对多个 Thunderbird 窗口的支持。{L2}{L1}您现在可以从 QuickFolders 工具菜单打开此屏幕。{L2}{L1}改进了 Linux 下工具栏的可读性{L2}{L1} [邮件扩展迁移] 许可库已迁移到后台脚本中。 如果您遇到与许可相关的任何问题，请通过支持选项卡与我联系！{L2}"
+    "message": "{L1}在 5.7.2 中修復：當 quickFilters 激活其助手時，選項卡左側的所有圖標都將變為白色{L2} {L1}在 5.7.2 中修复：当 quickFilters 激活其助手时，选项卡左侧的所有图标都将变为白色{L2} {L1} 已在 5.7.1 中修复：搜索具有“父文件夹/父文件夹/想要的文件夹”语法的文件夹时，不考虑名称为单个字符长度的父文件夹。 {L2}{L1}使 QuickFolders 与 Thunderbird 91 兼容。{L2}{L1}在选项屏幕和导航工具栏中改进了对黑暗和 3rd 方主题的支持。{L2}{L1}改进了 [what's new] 按钮与非 -标准 QuickFolders 主题{L2}{L1}已修复：有时在重新启动或安装其他附加组件或更新后会重置会话，以便显示所有类别。{L2}"
   },
   "window-title": {
     "description": "page title. first placeholder will be replaced with Add-on name",

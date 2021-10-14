@@ -29,7 +29,7 @@
     "message": "Ich möchte meine Lizenz erneuern"
   },
   "btn-want-a-license": {
-    "message": "Ich möchte eine Lizenz kaufen"
+    "message": "Lizenz auswählen"
   },
   "btn-want-to-donate": {
     "message": "Ich möchte mit einer einmaligen Spende helfen."
@@ -50,13 +50,19 @@
     "message": "Domänen Lizenz erwerben"
   },
   "buyDomainLicense.instruct": {
-    "message": "Sie benötigen Lizenzen für eine Firma mit mehr als 5 Benutzern? Eine Domänen-Lizenz ist hier billiger:"
+    "message": "Sie benötigen Pro-Lizenzen für eine Firma mit mehr als 5 Benutzern? Eine Domänen-Lizenz ist hier billiger:"
   },
   "buyLicense.instruct": {
-    "message": "Sie benutzen QuickFolders persönlich? Holen Sie sich eine Einzelplatz-Lizenz. Diese Lizenz ist an Ihre persönliche Email Adressen gebunden. Sie kann auf mehreren Installationen verwendet werden."
+    "message": "Sie wollen alle Premium Funktionen von QuickFolders unbegrenzt nutzen? Holen Sie sich eine QuickFolders Pro Einzelplatz-Lizenz. Diese Lizenz ist an Ihre persönliche Email Adressen gebunden. Sie kann auf mehreren Installationen verwendet werden."
   },
-  "buyPersonalLicense.button": {
-    "message": "Einzel-Lizenz erwerben!"
+  "buyProLicense.button": {
+    "message": "Pro-Lizenz erwerben!"
+  },
+  "buyStandardLicense.button": {
+    "message": "Standard Lizenz erwerben!"
+  },
+  "buyStandardLicense.instruct": {
+    "message": "Sie wollen nur die Standardfunktionen? Kaufen sie jetzt eine verbilligte Standard-Lizenz und testen Sie weiter die Premium Funktionen."
   },
   "chkComposerSubfolders": {
     "message": "Gilt auch für Unterverzeichnisse"
@@ -157,7 +163,7 @@
     "message": "Diese Identität als Absender für neue Emails wählen"
   },
   "getQuickFolders": {
-    "message": "Holen Sie sich QuickFolders Pro"
+    "message": "QuickFolders-Lizenzen"
   },
   "grpComposer": {
     "message": "Email Standardfelder"
@@ -210,8 +216,41 @@
     "description": "Shown if license expires more than a year from now",
     "message": "Vielen Dank, dass Sie kürzlich Ihre Lizenz verlängert haben oder gespendet haben. Da Sie zur Zukunftssicherung dieses Add-ons beigetragen haben, können Sie dieses Fenster einfach schließen."
   },
+  "licenseComparison" : {
+    "message": "Um die Funktionen der verschiedenen Versionen zu vergleichen, {linkStart}lesen Sie diese Liste{linkEnd}."
+  },  
+  "licenseHead": {
+    "message": "Neues Lizenzsystem"
+  },  
+  "licenseTypes": {
+    "message": "QuickFolders  bietet zwei Lizenztypen an, Standard und Pro; diese sind notwendig um mit den Änderungen in der Thunderbird Plattform Schritt zu halten und nötige Reparaturen und Innovationen zu finanzieren. Da Änderungen, die möglicherweise die Erweiterungsfunktionalität beeinträchtigen, jährlich eingeführt werden, ist die Lizenz auch 1 Jahr gültig."
+  },
   "licenseWindow.title": {
     "message": "QuickFolders Pro Lizenz"
+  },
+  "license_restriced.unpaid": {
+    "message": "Nicht lizenzierte Version - eingeschränkte Funktion. Mehr Info…"
+  },
+  "license_restriced.std": {
+    "message": "Standardlizenz - eingeschränkte Pro-Funktion. Mehr Info…"
+  },
+  "license_restriced.standard.maxtabs": {
+    "message": "QuickFolders benötigt eine Pro-Lizenz, um mehr als $maxTabs$ Registerkarten zu unterstützen.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "license_restriced.unpaid.maxtabs": {
+    "message": "QuickFolders benötigt eine Lizenz, um mehr als $maxTabs$ Registerkarten zu unterstützen.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "mozillas-basic-platform": {
     "message": "Mozilla bietet nur eine Basis-Plattform, um unsere Software für Sie als Endbenutzer weiterzuleiten. Wenn wir unsere Benutzer um Zahlung oder Support bitten müssen, können wir dies nicht über addons.thunderbird.net tun - es handelt sich nicht um einen App Store mit integrierten Paywalls oder Lizenzverwaltung wie iTunes oder Google Play."
@@ -228,9 +267,6 @@
         "example": "QuickFolders"
       }
     }
-  },
-  "on-permissions": {
-    "message": "WICHTIG: Automatische Updates werden Sie möglicherweise nicht zur Installation auffordern, wenn eine neue Add-on-Version zusätzliche Berechtigungen erfordert. Stattdessen sehen Sie dann dieses Warnsymbol auf der Thunderbird-Hauptmenüschaltfläche, auf die Sie klicken müssen, um das Update abzuschließen. Für die Migration auf das neue Erweiterungssystem ist das Anfordern von Berechtigungen erforderlich. Ansonsten können wir keine Bugfixes / neue Features liefern!"
   },
   "purchase-a-license": {
     "message": "Kaufen Sie eine Lizenz."
@@ -313,11 +349,11 @@
   "qf.checkbox.autoFocusPreview": {
     "message": "Bei Verzeichniswechsel Eingabefokus auf EMail-Liste"
   },
-  "qf.checkbox.autoHideToolbar": {
-    "message": "QuickFolders ausblenden wenn unnötig"
+  "qf.checkbox.hideInSingleMessage": {
+    "message": "QuickFolders in Einzelnachtrichten-Tabs ausblenden"
   },
-  "qf.checkbox.autoHideToolbar.tooltip": {
-    "message": "Versteckt die Werkzeugleiste bei Aktivierung bestimmter Thunderbird Tabs, wie z.B. Kalender (Lightning), Addon Manager."
+  "qf.checkbox.hideInSingleMessage.tooltip": {
+    "message": "Versteckt die QuickFolders-Leiste wenn eine einzelne Mail im Tab angezeigt wird."
   },
   "qf.checkbox.currentFolder.closeButton": {
     "message": "Schliessen Schaltfläche"
@@ -541,14 +577,17 @@
   "qf.copyfolders.tooltip": {
     "message": "Kopiert die komplette Verzeichniskonfiguration in die Zwischenablage"
   },
+  "qf.currentFolderBackground.lightweight": {
+    "message": "Thunderbird-Theme"
+  },
   "qf.currentFolderBackground.custom": {
-    "message": "benutzerdefiniert"
+    "message": "Benutzerdefiniert"
   },
   "qf.currentFolderBackground.dark": {
-    "message": "dunkel"
+    "message": "Dunkel"
   },
   "qf.currentFolderBackground.default": {
-    "message": "standard"
+    "message": "Silber"
   },
   "qf.currentFolderBackground.translucent": {
     "message": "Milchglas"
@@ -900,6 +939,9 @@
   "qf.licenseValidation.passed": {
     "message": "Vielen Dank für's Registrieren von Quickfolders Pro! Alle Premium-Funktionen sind nun freigeschaltet."
   },
+  "qf.licenseValidation.standard": {
+    "message": "Vielen Dank für die Registrierung einer QuickFolders-Lizenz - Sie helfen dem Add-on ungemein! Wenn Sie weitere Funktionen benötigen, können Sie jederzeit auf die Pro-Lizenz upgraden."
+  },  
   "qf.loadConfig": {
     "message": "Konfiguration laden…"
   },
@@ -985,7 +1027,7 @@
     "message": "Diese Meldung in Zukunft nicht mehr anzeigen."
   },
   "qf.notification.newsFlash": {
-    "message": "$addonName$ wurde aktualisiert! Lesen Sie was es neues gibt…",
+    "message": "$addonName$ wurde aktualisiert! Wichtige Neuigkeiten…",
     "placeholders": {
       "addonName": {
         "content": "$1",
@@ -1008,17 +1050,46 @@
   "qf.notification.premium.btn.renewLicense": {
     "message": "Lizenz erneuern"
   },
+  "qf.notification.premium.btn.upgrade": {
+    "message": "Auf Pro Upgraden"
+  },
   "qf.notification.premium.readingList": {
     "message": "Es sind jetzt {1} Lesezeichen definiert. Die Gratisversion von QuickFolders unterstützt maximal {2}."
   },
+  "qf.notification.premium.shortcut": {
+    "message": "Die Premium-Lizenz bietet Ihnen zusätzlich eine konfigurierbare Tastenkombination."
+  },
   "qf.notification.premium.tabIcons": {
-    "message": "Es sind jetzt {1} Symbole definiert. Die Gratisversion von QuickFolders unterstützt maximal {2}."
+    "message": "Sie verwenden jetzt $cntIcons$ benutzerdefinierte Symbole für Tabs. Die kostenlose Version von QuickFolders unterstützt maximal $maxFreeIcons$. Die Standardlizenz unterstützt $maxStdIcons$. QuickFolders Pro hat keine Begrenzung.",
+    "placeholders": {
+      "cntIcons": {
+        "content": "$1",
+        "example": "10"
+      },
+      "maxFreeIcons": {
+        "content": "$2",
+        "example": "5"
+      },
+      "maxStdIcons": {
+        "content": "$3",
+        "example": "12"
+      }
+    }
   },
   "qf.notification.premium.text": {
-    "message": "{1} ist eine Premium Funktion, bitte registrieren Sie QuickFolders um diese permanent zu benutzen."
+    "message": "{1} ist eine Premium Funktion, bitte registrieren Sie QuickFolders Pro um diese zu benutzen."
   },
   "qf.notification.premium.title": {
     "message": "Premium Funktion"
+  },
+  "qf.notification.standard.readingList": {
+    "message": "Sie haben jetzt {1} Lesezeichen definiert. Die Standardlizenz von QuickFolders erlaubt maximal {2}."
+  },
+  "qf.notification.standard.text": {
+    "message": "{1} ist eine lizenzbeschränkte Funktion. Bitte erwerben Sie eine QuickFolders-Lizenz, um sie zu verwenden."
+  },
+  "qf.notification.standard.title": {
+    "message": "Standardfunktion"
   },
   "qf.options.LayoutColorAppearance": {
     "message": "Individuelle Tab-Farben"
@@ -1153,7 +1224,7 @@
     "message": "Anzeigeformat:"
   },
   "qf.quickMove.silent": {
-    "message": "Keine Benachrichtigungen nach dem Verschieben von Mails weg."
+    "message": "Benachrichtigungen nach dem Verschieben von Mails unterdrücken."
   },
   "qf.register.licenseValid.expired": {
     "message": "Ihre Lizenz lief ab am:"
@@ -1171,7 +1242,7 @@
     "message": "Allgemein"
   },
   "qf.tab.gopro": {
-    "message": "QuickFolders Pro"
+    "message": "Lizenzen"
   },
   "qf.tab.layout": {
     "message": "Layout"
@@ -1639,10 +1710,36 @@
     "message": "Erneuern Sie Ihre Lizenz."
   },
   "special-offer-content": {
-    "message": "Schützen Sie QuickFolders für die bevorstehende Thunderbird-Version 91 und sparen Sie beim Kauf einer Lizenz {boldStart}40%{boldEnd}! Dieses Sonderangebot ist bis zum {boldStart}18. Juli{boldEnd} verfügbar."
+    "message": "Upgraden Sie Ihre Funktionen und sparen Sie {boldStart}$reduction${boldEnd}, indem Sie eine QuickFolders Pro-Lizenz kaufen! Dieses Sonderangebot ist bis zum {boldStart}$expirydate${boldEnd} verfügbar. Oder wählen Sie die Standardfunktionen mit der neuen {linkStart}Standardlizenz{linkEnd}.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "16. April"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "30%"
+      }
+    }
+  },
+  "special-offer-upgrade": {
+    "message": "Jetzt von QuickFolders Standard auf Pro upgraden und {boldStart}$reduction${boldEnd} sparen! Dieses Sonderangebot ist bis zum {boldStart}$expirydate${boldEnd} verfügbar.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "September 11"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "50%"
+      }
+    }
+  }, 
+  "special-offer-expiry": {
+    "message": "11. September"    
   },
   "special-offer-head": {
-    "message": "Machen Sie QuickFolders zukunftssicher!"
+    "message": "Machen Sie QuickFolders nachhaltig"
   },
   "special-offer-intro": {
     "message": "{boldStart} Liebe(r) {name} {boldEnd}, wenn Sie noch keine Lizenz haben, sollten Sie QuickFolders für die Zukunft unterstützen. Weitere große Änderungen an Thunderbird kommen und ich brauche {boldStart}Ihre Hilfe{boldEnd}, um Schritt zu halten!"
@@ -1724,7 +1821,7 @@
     "message": "Lesen Sie hier das detaillierte Änderungsprotokoll (nur Englisch):"
   },
   "whats-new-list": {
-    "message": "{L1}Der quickMove / quickJump-Funktion wurden wesentliche neue Suchfunktionen hinzugefügt. Um Hilfe dazu zu erhalten, klicken Sie auf das [?]-Symbol rechts neben dem Suchfeld.{L2}{L1}Sie können diesen Bildschirm jetzt über das QuickFolders-Werkzeugmenü öffnen.{L2}{L1}Verbesserte Unterstützung für mehrere Thunderbird-Fenster.{L2}{L1}Verbesserte Lesbarkeit der Symbolleisten unter Linux{L2}{L1} [Migration der Mail-Erweiterung] Die Lizenzbibliothek wurde in ein Hintergrundskript migriert. Bei Problemen mit der Lizenzierung kontaktieren Sie mich bitte über den Support-Tab!{L2}"
+    "message": "{L1}Behoben in 5.7.2: Wenn quickFilters seinen Assistenten aktiviert, sind alle Symbole links neben den Registerkarten weiß{L2}{L1} Behoben in 5.7.1: Bei der Suche nach Ordnern mit der Syntax 'übergeordneter Ordner/übergeordneter Ordner/gesuchter Ordner' wurden übergeordnete Ordner mit Namen mit einer einzigen Zeichenlänge nicht berücksichtigt.{L2} {L1}QuickFolders ist jetzt mit Thunderbird 91 kompatibel.{L2} {L1}Verbesserte Unterstützung für dunkle und Drittanbieter-Themen, sowohl im Optionsbildschirm als auch in der Navigationssymbolleiste.{L2} {L1}Verbesserte Sichtbarkeit der Schaltfläche [Neuigkeiten] mit nicht-standard QuickFolders Theme{L2} {L1}Behoben: Manchmal wurden bei Neustart oder nach Installation anderer Addons oder updates die Session zurückgesetzt, so das alle Kategorien angezeigt wurden.{L2}"
   },
   "window-title": {
     "description": "Seitentitel. Der erste placeholder wird durch den Add-on Namen ersetzt",

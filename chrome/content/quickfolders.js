@@ -487,8 +487,10 @@ END LICENSE BLOCK */
        from converting localization to json in 5.5.1)
     ## In Thunderbird 89, the options menu item was not displayed in Add-ons Manager.
   
-  5.6 QuickFolders Pro - WIP
+  5.6.4 QuickFolders Pro - 04/07/2021
     ## [issue 155] Support entering multiple words in a search string to find longer folder names that are composite
+    ##             also support ">" for skipping folders.
+    ##             added help panel for search
     ## [issue 150] New line characters "\n" displayed in some strings in version 5.5.2
     ## [issue 167] Unreadable colors of QuickFolders toolbar icons / font in Linux
     ## Added instruction text on empty toolbar which was missing since Thunderbird 78 migration
@@ -507,11 +509,55 @@ END LICENSE BLOCK */
     ## - change options of where to display the Current Folder Bar (main window, message tab, single message window)
     ## - changes to the license when entered / validated
     ## All these actions now work simultaneously and update in multiple Thunderbird windows.
-               
     
+  5.6.5 QuickFolders Pro - 05/07/2021
+    ## [issue 172] quickMove results pathes are only showing last 2 folders in path if only a single search word is entered.
+    
+  5.6.6 QuickFolders Pro - 11/07/2021
+    ## [issue 177] Unreliable search if space and "-" characters are combined in the search string
+    ## [issue 174] Fixed: QuickFolders toolbar was hidden in single message tabs by default.
+       Removed obsolete setting extensions.quickfolders.toolbar.onlyShowInMailWindows and added UI for 
+       hiding QuickFolders toolbar in single message tabs
+    ## added experimental accounts which prevents a rare error on startup.
+    ## [issue 176] Hide instructions on how to set up QuickFolders at startup (if tabs are already defined) 
+    ## Proper removal of event listeners on shut down
+    ## Improved icon for quickMove help
+    ## [issue 179] use extensions.quickfolders.premium.findFolder.disableSpace=true to disable " " search + improve performance
+    
+
+  5.7 QuickFolders Pro - 10/08/2021
+    ## [issue 187] Implement a QuickFolders Standard License
+    ## [issue 184] Update Notice - "What's New button" is badly visible when using different QF theme than flat style
+    ## [issue 166] 3rd party themes - Current folder toolbar colors are incorrect until Refresh visible tabs command
+    ## [issue 186] Theming make some items in options screens hard / impossible to see 
+       - improved visibility of dropdowns in options screen when using dark (and third party) themes
+    ## [issue 185] On installation / sometimes restart or update of _other_ add-ons category is reset to "all"
+                   Fixed by not removing the session store function when Add-on is removed within session (call to  QuickFolders.restoreSessionStore)
+    ## Add keyboard support to selecting items from any recent folders menu.
+    ## Added dedicated path for Thunderbird 91 specific style rules. (content/skin/tb91) - qf-options.css
+    ## Removed old rsa module 
+    ## default event for popupmenus changed from click to command to better support keyboard only navigation. [extensions.quickfolders.debug.popupmenus.folderEventType]
+    ## [issue 114] Make QuickFolders compatible with Thunderbird 91. (ESR 2021/22)
+    ## - Fixed the missing (and badly styled) [Buy License] button at the bottom of the options dialog. 
+         this is done by loading a separate style sheet link element into the shadow DOM.
+    ## - Fixed: showing the debug settings (and other advanced settings) via a small window that 
+                filters "about:config" stopped working in Tb91.  
+    ## - Fixed: missing icons on sliding notification bars
+    ## - Removed deprecated fixIterators
+    ## - [issue 189] Fixed: No longer able to move a message by dropping it on a quick folder tab
+                     the function copyMessages was renamed in Tb91
+    ## - [issue 190] Fixed dragging the envelope from current folder toolbar (Navigation bar)
+    ## TO DO: review qf.notification.premium.text (remove "using it -permanently-") 
+
+  5.7.1 QuickFolders Pro - WIP
+    ## [issue 197] Instructions on empty toolbar get duplicated on folder change https://github.com/RealRaven2000/QuickFolders/issues/197
+    ## [issue 198] Tb91 regression: Junk folder tab doesn't get focus when clicked (IMAP) - 
+    ## [issue 199] Subfolders with with length of 1 character omitted from quickJump search results
+    ## removed "workaround" experimental APIs (notifications, accounts)
+    
+
     -=-----------------=-    PLANNED
     ## [issue 103] Feature Request: Support copying folders
-
 
    	TODOs
 	=========
@@ -960,10 +1006,10 @@ var QuickFolders = {
   // all main window elements that change depending on license status (e.g. display "Expired" instead of QuickFolders label)
   initLicensedUI: function initLicensedUI() {
     let State = QuickFolders.Util.licenseInfo.status,
-        hasLicense = QuickFolders.Util.hasPremiumLicense();
+        hasLicense = QuickFolders.Util.hasValidLicense();
     QuickFolders.Util.logDebug ("initLicensedUI - hasLicense = " + hasLicense + "\n licenseInfo:", QuickFolders.Util.licenseInfo);
     if (hasLicense) {  // reset licenser (e.g. in new window)
-      QuickFolders.Util.logDebug ("Premium License found - removing Animations()...");
+      QuickFolders.Util.logDebug ("License found - removing Animations()...");
       QuickFolders.Interface.removeAnimations('quickfolders-layout.css');
     }
     let menuRegister = document.getElementById('QuickFolders-ToolbarPopup-register');
@@ -972,15 +1018,15 @@ var QuickFolders = {
         case "Valid":
           menuRegister.classList.add('paid');
           menuRegister.classList.remove('free');
-          menuRegister.label = QuickFolders.Util.getBundleString("qf.menuitem.quickfolders.register", "QuickFolders Pro License…");
+          menuRegister.label = QuickFolders.Util.getBundleString("qf.menuitem.quickfolders.register");
           break;
         case "Expired":
-          menuRegister.label = "QuickFolders Pro: " + QuickFolders.Util.getBundleString("qf.notification.premium.btn.renewLicense", "Renew License") + "\u2026";
+          menuRegister.label = "QuickFolders Pro: " + QuickFolders.Util.getBundleString("qf.notification.premium.btn.renewLicense") + "\u2026";
           menuRegister.classList.add('expired');
           menuRegister.classList.remove('free');
           break;
         default:
-          menuRegister.label = QuickFolders.Util.getBundleString("qf.menuitem.quickfolders.register", "QuickFolders Pro License…");
+          menuRegister.label = QuickFolders.Util.getBundleString("qf.menuitem.quickfolders.register");
           menuRegister.classList.add('free');
       }
     }
@@ -1094,14 +1140,38 @@ var QuickFolders = {
 
 			this.util.logDebugOptional("dnd","toolbarDragObserver.drop - " + contentType);
  			function addFolder(src) {
-					if(src) {
-						let cat = QuickFolders.Interface.CurrentlySelectedCategories;
-						if (QuickFolders.Model.addFolder(src, cat)) {
-							let s = "Added shortcut " + src + " to QuickFolders"
-							if (cat !== null) s = s + " Category " + cat;
-							try{ QuickFolders.Util.showStatusMessage(s); } catch (e) {};
-						}
-					}
+        if(src) {
+          let msg="", maxTabs, warnLevel;
+          if (!QuickFolders.Util.hasValidLicense()) { // max tab
+            maxTabs = QuickFolders.Model.MAX_UNPAID_TABS;
+            msg = QuickFolders.Util.getBundleString("license_restriced.unpaid.maxtabs",[maxTabs]);
+            warnLevel = 2;
+          }
+          else if (QuickFolders.Util.hasStandardLicense()) {
+            maxTabs = QuickFolders.Model.MAX_STANDARD_TABS;
+            msg = QuickFolders.Util.getBundleString("license_restriced.standard.maxtabs",[maxTabs]);
+            warnLevel = 0;
+          }
+          if (QuickFolders.Model.selectedFolders.length >= maxTabs
+              && 
+              !QuickFolders.Model.getFolderEntry(src)) {
+            if (msg) { 
+              // allow adding folder (to different category if tab already exists)
+              // otherwise, restrictions apply
+              QuickFolders.Util.popupRestrictedFeature("tabs>" + maxTabs, msg, warnLevel);
+              QuickFolders.Interface.viewSplash(msg);
+              return false;
+            }         
+          }
+          
+          let cat = QuickFolders.Interface.CurrentlySelectedCategories;
+          if (QuickFolders.Model.addFolder(src, cat)) {
+            let s = "Added shortcut " + src + " to QuickFolders"
+            if (cat !== null) s = s + " Category " + cat;
+            try{ QuickFolders.Util.showStatusMessage(s); } catch (e) {};
+          }
+        }
+        return true;
 			};
 
 			QuickFolders.Util.logDebugOptional("dnd", "toolbarDragObserver.drop " + contentType);
@@ -1110,6 +1180,7 @@ var QuickFolders = {
 			switch (contentType) {
 				case "text/x-moz-folder":
 				case "text/x-moz-newsfolder":
+
 					if (evt.dataTransfer && evt.dataTransfer.mozGetDataAt) { 
             let count = evt.dataTransfer.mozItemCount ? evt.dataTransfer.mozItemCount : 1;
             for (let i=0; i<count; i++) { // allow multiple folder drops...
@@ -1118,7 +1189,7 @@ var QuickFolders = {
                 sourceUri = msgFolder.QueryInterface(Components.interfaces.nsIMsgFolder).URI;
               else
                 sourceUri = QuickFolders.Util.getFolderUriFromDropData(evt, dragSession); // Postbox
-              addFolder(sourceUri);
+              if (!addFolder(sourceUri)) break;
             }
 					}
 					else {
@@ -1624,6 +1695,8 @@ var QuickFolders = {
 						    menupopup = this.doc.createXULElement ? this.doc.createXULElement('menupopup') : this.doc.createElement('menupopup'),
 						    popupId;
 						QI.FoldersBox.appendChild(popupset);
+            
+            let isDisabled = (button && targetFolder) ? (button.getAttribute("disabled") || false) : false;
 
 						if (targetFolder) {
 							popupId = 'moveTo_'+targetFolder.URI;
@@ -1639,7 +1712,13 @@ var QuickFolders = {
 								menupopup.folder = targetFolder;
 								popupset.appendChild(menupopup);
 								removeLastPopup(QuickFolders_globalHidePopupId, this.doc);
-								QI.addSubFoldersPopup(menupopup, targetFolder, true);
+                
+                if (isDisabled) {
+                  let mi = QI.createMenuItem_disabled();
+                  menupopup.appendChild(mi);
+                }
+                else
+                  QI.addSubFoldersPopup(menupopup, targetFolder, true);
 							}
 						}
 						else { // special folderbutton: recent
@@ -1908,6 +1987,23 @@ var QuickFolders = {
 							txtUris ='',
 							dt = evt.dataTransfer,
 					    types = dt.mozTypesAt(0);
+              
+          if (DropTarget.getAttribute("disabled")) {
+            let msg="", maxTabs;
+            if (!util.hasValidLicense()) { // max tab
+              maxTabs = QuickFolders.Model.MAX_UNPAID_TABS;
+              msg = util.getBundleString("license_restriced.unpaid.maxtabs",[maxTabs]);
+            }
+            else if (util.hasStandardLicense()) {
+              maxTabs = QuickFolders.Model.MAX_STANDARD_TABS;
+              msg = util.getBundleString("license_restriced.standard.maxtabs",[maxTabs]);
+            }
+            if (msg) {
+              util.popupRestrictedFeature("tabs>" + maxTabs, msg, 2);
+              QuickFolders.Interface.viewSplash(msg);
+              return;
+            }
+          }
 							
 					if (types.contains("text/x-moz-message")) {
 					  lastAction = "get data from event.dataTransfer"
@@ -2128,8 +2224,8 @@ QuickFolders.prepareSessionStore = function () {
   mailTabType.modes["folder"].persistTab = function(aTab) {
     let retval = orgPersist(aTab);
     if (retval) {
-      util.logDebug("persist tab category: " + aTab.QuickFoldersCategory);
       retval.QuickFoldersCategory = aTab.QuickFoldersCategory; // add category from the tab to persisted info object
+      util.logDebug("Persisted tab category: " + aTab.QuickFoldersCategory);
     }
     return retval; 
   }
@@ -2138,16 +2234,13 @@ QuickFolders.prepareSessionStore = function () {
   mailTabType.QuickFolders_SessionStore.restoreTab = orgRestore;
   mailTabType.modes["folder"].restoreTab = function(aTabmail, aPersistedState) {
     orgRestore(aTabmail, aPersistedState);
-    debugger;
     let txt;
     try {
       txt = aPersistedState.QuickFoldersCategory || "(no category)";
     } catch(ex) {;}
-    util.logDebug("restored tabs: " + txt);
-    // let  rdf = Components.classes['@mozilla.org/rdf/rdf-service;1'].getService(CI.nsIRDFService),
-    //      folder = rdf.GetResource(aPersistedState.folderURI).QueryInterface(CI.nsIMsgFolder);
-    let folder = model.getMsgFolderFromUri(aPersistedState.folderURI); 
-    if (folder && aPersistedState.QuickFoldersCategory) {
+    // let folder = model.getMsgFolderFromUri(aPersistedState.folderURI); 
+    util.logDebug("restore tab: QuickFoldersCategory = " + txt + " persisted State = ", aPersistedState);
+    if (aPersistedState.QuickFoldersCategory) {
       let tabInfo, theUri;
       // Thunderbird only code, so it is fine to use tabInfo here:
       for (let i = 0; i < aTabmail.tabInfo.length; i++) {
@@ -2158,7 +2251,7 @@ QuickFolders.prepareSessionStore = function () {
             // util.logDebug("restore category to tabInfo folder [" + theUri + "] + " +  aPersistedState.QuickFoldersCategory);
             let cat = aPersistedState.QuickFoldersCategory;
             if (cat) {
-              util.logDebug("restore category " + cat);
+              util.logDebug("Restored category " + cat);
               tabInfo.QuickFoldersCategory = aPersistedState.QuickFoldersCategory;
             }
             return;
@@ -2370,7 +2463,9 @@ function QuickFolders_MySelectFolder(folderUri, highlightTabFirst) {
   let isSelected = false,
       forceSelect = prefs.isChangeFolderTreeViewEnabled;
   const theTreeView = gFolderTreeView;
-  QuickFolders.lastTreeViewMode = theTreeView.mode; // backup of view mode. (TB3)
+  
+  if (theTreeView.mode)
+    QuickFolders.lastTreeViewMode = theTreeView.mode; // backup of view mode. (TB78)
 
   folderIndex = theTreeView.getIndexOfFolder(msgFolder);
   if (null == folderIndex) {
@@ -2399,23 +2494,34 @@ function QuickFolders_MySelectFolder(folderUri, highlightTabFirst) {
                      + Flags.MSG_FOLDER_FLAG_JUNK + Flags.MSG_FOLDER_FLAG_ARCHIVES ; 
     if (msgFolder.flags & specialFlags) {
       // is this folder a smartfolder?
-      if (folderUri.indexOf("nobody@smart")>0 && null==parentIndex && theTreeView.mode !== "smart") {
+      let isSmartView = (theTreeView.activeModes && theTreeView.activeModes.includes("smart")) ||
+                        (theTreeView.mode && theTreeView.mode=="smart");
+      
+      if (folderUri.indexOf("nobody@smart")>0 && null==parentIndex && !isSmartView) {
         util.logDebugOptional("folders.select","smart folder detected, switching treeview mode...");
         // toggle to smartfolder view and reinitalize folder variable!
-        theTreeView.mode="smart"; // after changing the view, we need to get a new parent!!
+        if (theTreeView.activeModes)
+          theTreeView.activeModes.push("smart");
+        else if (theTreeView.mode)
+          theTreeView.mode="smart"; // after changing the view, we need to get a new parent!!
         //let rdf = Cc['@mozilla.org/rdf/rdf-service;1'].getService(Ci.nsIRDFService),
         //    folderResource = rdf.GetResource(folderUri);
         msgFolder = model.getMsgFolderFromUri(folderUri);   // folderResource.QueryInterface(Ci.nsIMsgFolder);
         parentIndex = theTreeView.getIndexOfFolder(msgFolder.parent);
       }
+      
+      isSmartView = (theTreeView.mode && theTreeView.mode=="smart") ||
+                    (theTreeView.activeModes && theTreeView.activeModes.includes("smart"));
 
       // a special folder, its parent is a smart folder?
-      if (msgFolder.parent.flags & Flags.MSG_FOLDER_FLAG_VIRTUAL || "smart" === theTreeView.mode) {
+      if (msgFolder.parent.flags & Flags.MSG_FOLDER_FLAG_VIRTUAL || isSmartView) {
         if (null === folderIndex || parentIndex > folderIndex) {
           // if the parent appears AFTER the folder, then the "real" parent is a smart folder.
           let smartIndex=0;
-          while (0x0 === (specialFlags & (theTreeView._rowMap[smartIndex]._folder.flags & msgFolder.flags)))
-          smartIndex++;
+          // we can have "non-folder" items here
+          while (!theTreeView._rowMap[smartIndex]._folder || 
+                 0x0 === (specialFlags & (theTreeView._rowMap[smartIndex]._folder.flags & msgFolder.flags)))
+            smartIndex++;
           if (!(theTreeView._rowMap[smartIndex]).open) {
             theTreeView._toggleRow(smartIndex, false);
           }
@@ -2451,7 +2557,7 @@ function QuickFolders_MySelectFolder(folderUri, highlightTabFirst) {
 
   // reset the view mode.
   if (!prefs.isChangeFolderTreeViewEnabled) {
-    
+    // this only works in Thunderbird 78 - Tb91 has the activeModes array... 
     if (QuickFolders.lastTreeViewMode !== null && theTreeView.mode !== QuickFolders.lastTreeViewMode) {
       util.logDebugOptional("folders.select","Restoring view mode to " + QuickFolders.lastTreeViewMode + "...");
       theTreeView.mode = QuickFolders.lastTreeViewMode;
@@ -2675,15 +2781,15 @@ QuickFolders.FolderListener = {
 					// describe the action that caused the compacting
 					switch (QuickFolders.compactReportCommandType) {
 						case 'compactFolder':
-							message = util.getBundleString("qfCompactedFolder", "Compacted folder") + " '" + item.prettyName + "'";
+							message = util.getBundleString("qfCompactedFolder") + " '" + item.prettyName + "'";
 							break;
 						case 'emptyJunk':
-							message = util.getBundleString("qfEmptiedJunk", "Emptied junk and compacted folder")+ " '" + item.prettyName + "'";
+							message = util.getBundleString("qfEmptiedJunk") + " '" + item.prettyName + "'";
 							if (!item.URI)
 								size2 = 0;
 							break;
 						case 'emptyTrash':
-							message = util.getBundleString("qfEmptiedTrash", "Emptied trash.");
+							message = util.getBundleString("qfEmptiedTrash");
 							if (!item.URI)
 								size2 = 0;
 							break;
@@ -2691,9 +2797,9 @@ QuickFolders.FolderListener = {
 							message = "unknown compactReportCommandType: [" + compactReportCommandType + "]";
 							break;
 					}
-					let originalSize= util.getBundleString("qfCompactedOriginalFolderSize","Original size"),
-					    newSize = util.getBundleString("qfCompactedNewFolderSize","New Size"),
-					    expunged = util.getBundleString("qfCompactedBytesFreed","Bytes expunged"),
+					let originalSize= util.getBundleString("qfCompactedOriginalFolderSize"),
+					    newSize = util.getBundleString("qfCompactedNewFolderSize"),
+					    expunged = util.getBundleString("qfCompactedBytesFreed"),
 					    out = message + " :: "
 						+ (size1 ? (originalSize + ": " + add1000Separators(size1.toString()) + " ::  "
 								   + expunged + ":" + add1000Separators((size1-size2).toString()) + " :: ")

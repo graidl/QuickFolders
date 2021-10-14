@@ -27,7 +27,7 @@
     "message" : "Haluan uusia lisenssin"
   } ,
   "btn-want-a-license": {
-    "message" : "Haluan ostaa lisenssin"
+    "message" : "Valitse lisenssi"
   } ,
   "btn-want-to-donate" : {
     "message" : "Haluan auttaa kertalahjoituksella."
@@ -55,16 +55,6 @@
   "qfMoveFolderOrNewTab": {
     "message": "Vedä kansiot tyhjälle alueelle työkalupalkissa - Jos haluat siirtää kansiota, pidä SHIFT-näppäintä alhaalla ja vedä välilehteen."
   },
-  "heading-updated": {
-    "message": "$addonName$ päivitetty onnistuneesti",
-    "description": "page heading. first placeholder will be replaced with Add-on name",
-    "placeholders": {
-      "addonName" : {
-        "content" : "$1", 
-        "example" : "QuickFolders"
-      }    
-    }
-  },  
   "heading-installed": {
     "message": "Asennus $addonName$ onnistui",
     "description": "page heading. first placeholder will be replaced with Add-on name",
@@ -75,6 +65,19 @@
       }    
     }
   },  
+  "heading-updated": {
+    "message": "$addonName$ päivitetty onnistuneesti",
+    "description": "page heading. first placeholder will be replaced with Add-on name",
+    "placeholders": {
+      "addonName" : {
+        "content" : "$1", 
+        "example" : "QuickFolders"
+      }    
+    }
+  },  
+  "intro": {
+    "message": "QuickFolders Pron vuotuinen lisenssi tarjoaa sinulle kaikki premium -ominaisuudet vuodeksi. Sen avulla voimme myös tukea ja kasvattaa tuotetta entisestään ja muuttaa sen vieläkin mahtavammaksi."
+  },
   "label-remind-me" : {
     "message": "Muistuta minua uudelleen $countDays$ päivän kuluttua.",
     "placeholders": {
@@ -87,7 +90,43 @@
   "license-is-extended" : {
     "message": "Kiitos, että lisenssit äskettäin tai olet lahjoittanut. Koska olet auttanut todistamaan tämän lisäosan tulevaisuudessa, voit yksinkertaisesti sulkea tämän ikkunan.",
     "description": "Shown if license expires more than a year from now"
+  },
+  "licenseComparison" : {
+    "message": "Voit verrata eri versioiden ominaisuuksia {linkStart} lukemalla tämän luettelon {linkEnd}."
+  },
+  "licenseHead": {
+    "message": "Uusi lisenssijärjestelmä"
   },  
+  "licenseTypes": {
+    "message": "QuickFolders tarjoaa kaksi lisenssiä, Standard ja Pro; nämä ovat välttämättömiä Thunderbird-alustan muutosten seuraamiseksi ja lisäosan innovaatioiden ja korjausten rahoittamiseksi. Koska muutokset, jotka mahdollisesti rikkovat laajennustoiminnon, otetaan käyttöön vuosittain, lisenssi on myös voimassa yhden vuoden."
+  },  
+  "licenseWindow.title": {
+    "message": "QuickFolders Pro -lisenssi"
+  },  
+  "license_restriced.std": {
+    "message": "Vakiolisenssi - rajoitettu Pro -toiminto. Lue lisää…"
+  },
+  "license_restriced.unpaid": {
+    "message": "Lisensoimaton versio - rajoitettu toiminto. Lue lisää…"
+  },
+  "license_restriced.standard.maxtabs": {
+    "message": "QuickFolders tarvitsee Pro -lisenssin yli $maxTabs$ välilehtien tukemiseen.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "license_restriced.unpaid.maxtabs": {
+    "message": "QuickFolders tarvitsee lisenssin, joka tukee yli $maxTabs$ välilehteä.",
+    "placeholders": {
+      "maxTabs": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
   "mozillas-basic-platform" : {
     "message" : "Mozilla tarjoaa vain perusalustan ohjelmistojemme toimittamiseksi sinulle, loppukäyttäjille. Jos meidän on pyydettävä käyttäjiltämme maksua tai tukea, emme voi tehdä tätä osoitteesta addons.thunderbird.net - se ei ole '' sovelluskauppa '', jossa on sisäänrakennetut paywallit tai lisenssien hallinta, kuten iTunes tai Google Play."
   } ,  
@@ -104,9 +143,6 @@
       }    
     }
   },  
-  "on-permissions": {
-    "message": "TÄRKEÄÄ: Automaattiset päivitykset eivät välttämättä pyydä sinua asentamaan, kun uusi lisäosaversio vaatii lisäoikeuksia. Sen sijaan näet tämän varoituskuvakkeen Thunderbird-päävalikkopainikkeessa, jota sinun on napsautettava päivityksen viimeistelemiseksi. Uuteen laajennusjärjestelmään siirtyminen edellyttää käyttöoikeuksien pyytämistä. Muuten emme voi toimittaa virhekorjauksia / uusia ominaisuuksia!"
-  },
   "purchase-a-license" : {
     "message" : "Osta lisenssi."
   },       
@@ -114,7 +150,7 @@
     "message" : "Lisenssin ostaminen!"
   }, 
   "qf.notification.newsFlash": {
-    "message": "$addonName$ päivitettiin! Katso mitä uutta…",
+    "message": "$addonName$ päivitettiin! Tärkeitä uutisia…",
     "placeholders": {
       "addonName": {
         "content": "$1",
@@ -125,15 +161,41 @@
   "renew-your-license" : {
     "message" : "Uusi lisenssi."
   },    
+  "special-offer-content" : {
+    "message": "Päivitä ominaisuudet ja säästä {boldStart} $reduction$ {boldEnd} ostamalla QuickFolders Pro -lisenssi! Tämä erikoistarjous on voimassa {boldStart} $expirydate$ {boldEnd} asti. Tai valitse vakiotoiminnot uudella {linkStart}vakiolisenssillä{linkEnd}.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "August 22"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "30%"
+      }
+    }
+  },
+  "special-offer-upgrade": {
+    "message": "Päivitä nyt QuickFolders Standardista Pro -versioon ja säästä {boldStart}$reduction${boldEnd}! Tämä erikoistarjous on voimassa {boldStart}$expirydate${boldEnd} asti.",
+    "placeholders": {
+      "expirydate": {
+        "content": "$1",
+        "example": "September 11"
+      },
+      "reduction": {
+        "content": "$2",
+        "example": "50%"
+      }
+    }
+  }, 
+  "special-offer-expiry": {
+    "message": "Syyskuuta 11"
+  }, 
   "special-offer-head" : {
     "message": "Tee QuickFoldersista tulevaisuuden todiste!"
   } ,  
   "special-offer-intro" : {
     "message": "{boldStart} Hyvä {name} {boldEnd}, jos sinulla ei vielä ole käyttöoikeutta, harkitse QuickFolder-kansioiden tukemista jatkossa. Lisää suuria muutoksia Thunderbirdiin on tulossa, ja tarvitsen {boldStart} apuasi {boldEnd} pysyäksesi mukana!"
   } , 
-  "special-offer-content" : {
-    "message": "Suojaa pikakansiot välittömältä Thunderbird-versiolta 91 ja säästä {boldStart} 40% {boldEnd} ostamalla lisenssi! Tämä erikoistarjous on saatavilla {boldStart} 18. heinäkuuta {boldEnd} asti."
-  }, 
   "support-preference" : {
     "message": "Tämä on ensisijainen tapa tukea $addonName$.",
     "placeholders": {
@@ -192,8 +254,8 @@
   "whats-new-intro" : {
     "message": "Lue yksityiskohtainen muutosloki täältä (vain englanniksi):" 
   },
-  "whats-new-list" : {
-    "message" : "{L1} QuickMove / quickJump-toimintoon on lisätty merkittäviä uusia hakuominaisuuksia. Jos tarvitset apua näissä asioissa, napsauta hakukentän oikealla puolella olevaa [?] -Symbolia. {L2}{L1} Voit nyt avata tämän näytön QuickFolders-työkaluvalikosta. {L2}{L1} Parannettu tuki useille Thunderbird-ikkunoille. {L2} {L1} Parannettu työkalurivien luettavuus Linuxissa {L2} {L1} [postilaajennuksen siirto] Lisenssikirjasto siirrettiin taustakoodiin. Jos sinulla on lisensointiin liittyviä ongelmia, ota yhteyttä minuun tukivälilehden kautta! {L2}"
+  "whats-new-list": {
+    "message" : "{L1} Korjattu kohdassa 5.7.2: Kun quickFilters aktivoi avustajansa, kaikki välilehtien vasemmalla puolella olevat kuvakkeet ovat valkoisia {L2} {L1} Korjattu kohdassa 5.7.1: Kun etsit kansioita, joiden syntaksi on 'pääkansio/vanhempi kansio/haluttu kansio', pääkansioita, joiden nimet ovat yhden merkin pituisia, ei otettu huomioon. {L2}{L1} Tehneet pikakansiot yhteensopiviksi Thunderbird 91: n kanssa. {L2} {L1} Parannettu tummien ja kolmansien osapuolten teemojen tukea sekä asetusnäytössä että navigointityökalurivillä. {L2} {L1} Parannettu [mitä uutta] -painikkeen näkyvyys muilla kuin -standardin mukainen QuickFolders-teema {L2} {L1} Korjattu: Joskus istunto nollautui uudelleenkäynnistyksen yhteydessä tai muiden lisäosien tai päivitysten asentamisen jälkeen, joten kaikki luokat näytettiin. {L2}"
   },
   "window-title": {
     "message": "Tervetuloa osoitteeseen $addonName$",
