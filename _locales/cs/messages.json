@@ -143,6 +143,9 @@
   "purchase-heading": {
     "message" : "Nákup licence!"
   }, 
+  "qf.menuitem.quickfolders.splash" : {
+    "message": "Nejnovější aktualizace Novinky…"
+  },
   "qf.notification.newsFlash": {
     "message": "$addonName$ bylo aktualizováno! Důležité novinky…",
     "placeholders": {
@@ -174,7 +177,7 @@
     }
   },  
   "special-offer-content": {
-    "message": "Vylepšete své funkce a ušetřete {boldStart} $reduction$ {boldEnd} zakoupením licence QuickFolders Pro! Tato speciální nabídka bude k dispozici do {boldStart}$expirydate${boldEnd}. Nebo vyberte standardní funkce s novou {linkStart}standardní licencí{linkEnd}.",
+    "message": "Vylepšete své funkce a ušetřete {boldStart} $reduction$ {boldEnd} zakoupením {linkStartPro}licence QuickFolders Pro{linkEnd}! Tato speciální nabídka bude k dispozici do {boldStart}$expirydate${boldEnd}. Nebo vyberte standardní funkce s novou {linkStart}standardní licencí{linkEnd}.",
     "placeholders": {
       "expirydate": {
         "content": "$1",
@@ -213,7 +216,7 @@
     }
   }, 
   "special-offer-expiry": {
-    "message": "31. října"
+    "message": "15. dubna"
   },
   "support-preference": {
     "message": "Toto je upřednostňovaný způsob podpory $addonName$.",
@@ -274,7 +277,7 @@
     "message": "Přečtěte si podrobný protokol změn zde (pouze v angličtině):" 
   },
   "whats-new-list": {
-    "message": "{L1} Thunderbird už při kontrole nových e -mailů z kontextové nabídky nepřeskočí do složky Doručená pošta. {L2} {L1} Podpora velké ikony v liště nástrojů QuickFolders pro zobrazení ve vysokém rozlišení. {L2} {L1} Opraveno: přesouvání složek z funkce quickMove selhala v Tb91. {L2} {L1} Různé opravy rozložení specifické pro Thunderbird 91. {L2}"
+    "message": "{L1}Verze 5.9.1: Zjednodušené chování nabídky posledních složek pro navigaci pomocí klávesnice.{L2}{L1}Nová klávesa [=] pro quickMove pro seznam nejnovějších složek, které byly použity quickMove / quickJump.{L2} {L1}Výchozí hodnota quickJump nyní vždy používá poslední složku. Pokud by bylo možné najít identické názvy složek, bylo možné přiřadit jiné návrhy místo posledního umístění složky.{L2} {L1}Dialogové okno možností bylo převedeno do HTML – toto je důležitý krok pro QuickFolders k tomu, aby se stala poštou založenou čistě na rozhraní API. rozšíření bez experimentálních oprávnění v budoucnu.{L2} {L1}Odstraněny problémy s quickJump ve stromu složek v kompaktním režimu.{L2} {L1}Vylepšený dialog pro úpravy kategorií.{L2}"
   },
   "window-title": {
     "message": "Vítejte v $addonName$",

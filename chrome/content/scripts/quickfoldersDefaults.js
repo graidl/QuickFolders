@@ -35,7 +35,9 @@ pref("extensions.quickfolders.quickMove.createFolderOnTop", false);
 pref("extensions.quickfolders.quickMove.useHotkey", true);
 pref("extensions.quickfolders.quickMove.Hotkey", 'M');
 pref("extensions.quickfolders.quickMove.Hotkey.Shift", true);
+pref("extensions.quickfolders.quickMove.history","[]");
 pref("extensions.quickfolders.quickMove.lastFolderName","");
+pref("extensions.quickfolders.quickMove.lastFolderURI","");
 pref("extensions.quickfolders.quickMove.autoFill",true);
 pref("extensions.quickfolders.quickMove.folderLabel", true);
 pref("extensions.quickfolders.quickMove.reopenMsgTabAfterMove", false); // [issue 132] disable reopening moved mail in single message tab
@@ -211,6 +213,7 @@ pref("extensions.quickfolders.recentfolders.showIcon", true);
 pref("extensions.quickfolders.recentfolders.folderPathDetail", 3); /* fld path only */
 pref("extensions.quickfolders.recentfolders.maxPathItems", 3);
 pref("extensions.quickfolders.recentfolders.showTimeStamp", false);
+pref("extensions.quickfolders.recentfolders.subfolders", false); // simplify recent folders
 // new Folder Optimization
 pref("extensions.quickfolders.update.disableMinimal", false);
 // Tab Context Menu items

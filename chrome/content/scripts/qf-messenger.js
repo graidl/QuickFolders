@@ -2,7 +2,6 @@ var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders.js", window, "UTF-8");
 window.QuickFolders.WL = WL; // this will be used wherever Add-on version is needed.
-Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-tablistener.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-preferences.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-themes.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-filterWorker.js", window, "UTF-8");
@@ -16,6 +15,8 @@ Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-folder-category.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/qf-styles.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-listener.js", window, "UTF-8");
+Services.scriptloader.loadSubScript("chrome://quickfolders/content/quickfolders-tablistener.js", window, "UTF-8");
+Services.scriptloader.loadSubScript("chrome://quickfolders/content/qf-scrollmenus.js", window, "UTF-8");
 
 var mylisteners = {};
 
@@ -195,6 +196,12 @@ async function onLoad(activatedWhileWindowOpen) {
                       class="cmd menuitem-iconic"
                       tagName="qfOptions"
                       />
+            <menuitem id="QuickFolders-ToolbarPopup-options"
+                      label="QuickFolders Options (classic)…"
+                      oncommand="QuickFolders.Interface.viewOptionsLegacy(-1, null);" 
+                      class="cmd menuitem-iconic"
+                      tagName="qfOptions"
+                      />                      
             <menuitem id="QuickFolders-ToolbarPopup-splash"
                       label="__MSG_qf.menuitem.quickfolders.splash__"
                       oncommand="QuickFolders.Interface.viewSplash();" 
@@ -242,7 +249,7 @@ async function onLoad(activatedWhileWindowOpen) {
             <menuitem id="QuickFolders-ToolbarPopup-refresh"
                       label="__MSG_qf.menuitem.quickfolders.repairTabs__"
                       accesskey="__MSG_qf.menuitem.quickfolders.repairTabsAccess__"
-                      oncommand="QuickFolders.Util.notifyTools.notifyBackground({ func: 'updateMainWindow', minimal: 'false' });" 
+                      oncommand="QuickFolders.Util.notifyTools.notifyBackground({ func: 'updateMainWindow', minimal: false });" 
                       class="cmd menuitem-iconic"
                       tagName="qfRebuild"
                       />
@@ -527,6 +534,7 @@ async function onLoad(activatedWhileWindowOpen) {
   // Enable the global notify notifications from background.
   window.QuickFolders.Util.notifyTools.enable();
   await window.QuickFolders.Util.init();
+  window.QuickFolders.quickMove.initLog();
   window.addEventListener("QuickFolders.BackgroundUpdate", window.QuickFolders.initLicensedUI);
   const QI = window.QuickFolders.Interface;
   
@@ -537,13 +545,22 @@ async function onLoad(activatedWhileWindowOpen) {
   mylisteners["toggleNavigationBar"] = QI.displayNavigationToolbar.bind(QI);
   mylisteners["updateQuickFoldersLabel"] = QI.updateQuickFoldersLabel.bind(QI);
   mylisteners["updateCategoryBox"] = QI.updateCategoryLayout.bind(QI);
-  mylisteners["updateMainWindow"] = QI.updateMainWindow.bind(QI); // need to add a parameter here, how to?
+  mylisteners["copyFolderEntriesToClipboard"] = QI.copyFolderEntriesToClipboard.bind(QI);
+  mylisteners["pasteFolderEntriesFromClipboard"] = QI.pasteFolderEntriesFromClipboard.bind(QI);
+  // function parameters in event.detail
+  mylisteners["updateMainWindow"] = 
+    (event) => QI.updateMainWindow.call(QI, event.detail ? event.detail.minimal : null); 
   mylisteners["currentDeckUpdate"] = QI.currentDeckUpdate.bind(QI); 
   mylisteners["initKeyListeners"] = window.QuickFolders.initKeyListeners.bind(window.QuickFolders);
   mylisteners["firstRun"] = window.QuickFolders.Util.FirstRun.init.bind(window.QuickFolders.Util.FirstRun);
+  // store and load config
+  const model =  window.QuickFolders.Model;
+  mylisteners["loadConfigLegacy"] = (event) => model.loadConfig.call(model, event);
+  mylisteners["storeConfigLegacy"] = (event) => model.storeConfig.call(model, event);
+  
   
   for (let m in mylisteners) {
-    window.addEventListener(`QuickFolders.BackgroundUpdate.${m}` , mylisteners[m]);
+    window.addEventListener(`QuickFolders.BackgroundUpdate.${m}`, mylisteners[m]);
   }
   
   window.QuickFolders.initDelayed(WL); // should call updateMainWindow!

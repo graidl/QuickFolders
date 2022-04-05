@@ -25,13 +25,13 @@ QuickFolders.Options = {
 
   // save space, for visually impaired
   collapseHead: function collapseHead() {
-    let hdr = document.getElementById('qf-header-container');
-    hdr.setAttribute('collapsed', true);
-    let panels = document.getElementById('QuickFolders-Panels');
-    panels.style.minHeight = '';
-    panels.style.overflowY = 'scroll';
-    let prefpane = document.getElementById('qf-options-prefpane');
-    prefpane.style.overflowY = 'scroll';;
+    let hdr = document.getElementById("qf-header-container");
+    hdr.setAttribute("collapsed", true);
+    let panels = document.getElementById("QuickFolders-Panels");
+    panels.style.minHeight = "";
+    panels.style.overflowY = "scroll";
+    let prefpane = document.getElementById("qf-options-prefpane");
+    prefpane.style.overflowY = "scroll";;
   },
   
   rememberLastTab: function rememberLastTab() {
@@ -72,12 +72,12 @@ QuickFolders.Options = {
 
       prefs.setUserStyle("Toolbar","background-color",
               getElement("toolbar-colorpicker").value);
-      prefs.setIntPref('style.corners.customizedTopRadiusN',
+      prefs.setIntPref("style.corners.customizedTopRadiusN",
               getElement("QuickFolders-Options-CustomTopRadius").value);
-      prefs.setIntPref('style.corners.customizedBottomRadiusN',
+      prefs.setIntPref("style.corners.customizedBottomRadiusN",
               getElement("QuickFolders-Options-CustomBottomRadius").value);
 
-      prefs.setStringPref('currentFolderBar.background', 
+      prefs.setStringPref("currentFolderBar.background", 
                 getElement("currentFolderBackground").value);
       // QuickFolders.Interface.setPaintButtonColor(-1);
       QuickFolders.Util.notifyTools.notifyBackground({ func: "initKeyListeners" }); // QuickFolders.initKeyListeners();
@@ -294,7 +294,13 @@ QuickFolders.Options = {
     getElement("qf-options-header-description").setAttribute("value", version);
     let tabbox = getElement("QuickFolders-Options-Tabbox");
     
-    getElement('chkShowRepairFolderButton').label = QI.getUIstring("qfFolderRepair","Repair Folder")
+    if (getElement('chkShowRepairFolderButton').label) {
+      getElement('chkShowRepairFolderButton').label = QI.getUIstring("qfFolderRepair","Repair Folder");
+    }
+    else { // HTML version
+      getElement('chkShowRepairFolderButton').parentNode.value=QI.getUIstring("qfFolderRepair","Repair Folder");
+    }
+    
     
     /*****  License  *****/
     options.labelLicenseBtn(getElement("btnLicense"), "buy");
@@ -401,7 +407,13 @@ QuickFolders.Options = {
         backImage = main.getComputedStyle(messengerWin).getPropertyValue("background-image"),
         newTabMenuItem = getMainElement('folderPaneContext-openNewTab');
     if (newTabMenuItem && newTabMenuItem.label) {
-      getElement('qfOpenInNewTab').label = newTabMenuItem.label.toString();
+      if (getElement('qfOpenInNewTab').label) {
+        getElement('qfOpenInNewTab').label = newTabMenuItem.label.toString();
+      }
+      else { // HTML conversion
+        getElement('qfOpenInNewTab').parentNode.value = newTabMenuItem.label.toString();
+      }
+      
     }
         
     // where theme styling fails.   
@@ -745,7 +757,7 @@ QuickFolders.Options = {
   },
   
   updateMainWindow: function updateMainWindow() {
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" });
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: false });
   },
   
   // send new key to background page for validation
@@ -969,7 +981,7 @@ QuickFolders.Options = {
   
   applyOrdinalPosition: function applyOrdinalPosition() {
     // refresh the toolbar button in main window(s)
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "true" }); 
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: true }); 
   } ,
   
   // change background color for current folder bar
@@ -1036,7 +1048,7 @@ QuickFolders.Options = {
           break;
       }
     }
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "true" });
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: true });
     return true;  // return updateResult;
   },
 
@@ -1052,7 +1064,7 @@ QuickFolders.Options = {
     if (!force && prefs.getIntPref("colorTabStyle") == styleId)
       return; // no change!
     prefs.setIntPref("colorTabStyle", styleId); // 0 striped 1 filled
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" }); 
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: false }); 
     
     let inactiveTab = document.getElementById('inactivetabs-label');
     QI.applyTabStyle(inactiveTab, styleId);
@@ -1218,7 +1230,7 @@ QuickFolders.Options = {
     else
       QuickFolders.Util.logToConsole('changeTextPreference could not find pref string: '  + prefString); 
     
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" });
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: false });
     return true;
   },
   
@@ -1241,7 +1253,7 @@ QuickFolders.Options = {
         QuickFolders.Util.notifyTools.notifyBackground({ func: "currentDeckUpdate" }); // QI.onDeckChange(current tab)
         return false;
       case "extensions.quickfolders.toolbar.largeIcons":
-        QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "true" });
+        QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: true });
         break;
     }
     // broadcast change of current folder bar for all interested windows.
@@ -1249,7 +1261,7 @@ QuickFolders.Options = {
       QuickFolders.Util.notifyTools.notifyBackground({ func: "updateNavigationBar" }); 
       return true;
     }
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" }); // force full update
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: false }); // force full update
     return true;
   },
   
@@ -1264,7 +1276,7 @@ QuickFolders.Options = {
     if (prefString)
       QuickFolders.Preferences.setBoolPrefVerbose(prefString, cb.checked);
     
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "true" }); 
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: true }); 
     return true;
   },
   
@@ -1313,9 +1325,9 @@ QuickFolders.Options = {
   showButtonShadow: function showButtonShadow(isChecked) {
     let el= document.getElementById('inactivetabs-label'),
         myStyle = !isChecked ? "1px -1px 3px -1px rgba(0,0,0,0.7)" : "none";
-    el.style.MozBoxShadow = myStyle;
+    el.style.boxShadow = myStyle;
     QuickFolders.Preferences.setBoolPref('buttonShadows', !isChecked);
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "true" }); 
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: true }); 
     return true;
   },
 
@@ -1349,7 +1361,7 @@ QuickFolders.Options = {
     getElement("inactivetabs-label").style.backgroundColor = buttonfaceColor;
     getElement("inactive-fontcolorpicker").value = buttontextColor;
     getElement("inactivetabs-label").style.color = buttontextColor;
-    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" }); 
+    QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: false }); 
     return true;
   },
 
@@ -1481,58 +1493,10 @@ QuickFolders.Options = {
 
   configureTooltips: function configureTooltips(btn) {
     setTimeout( function () {
-      QuickFolders.Options.showAboutConfig(btn, 'extensions.quickfolders.tooltips', true, true);
+      QuickFolders.Interface.showAboutConfig(btn, 'extensions.quickfolders.tooltips', true, true);
       } );  
   },
   
-  showAboutConfig: function showAboutConfig(clickedElement, filter, readOnly, updateUI = false) {
-    const name = "Preferences:ConfigManager",
-          Cc = Components.classes,
-          Ci = Components.interfaces,
-          util = QuickFolders.Util;
-    let mediator = Services.wm,
-        isTbModern = util.versionGreaterOrEqual(util.Appversion, "85"),
-        uri = (isTbModern) ? "about:config": "chrome://global/content/config.xhtml?debug";
-    
-    let w = mediator.getMostRecentWindow(name),
-        win = (clickedElement && clickedElement.ownerDocument && clickedElement.ownerDocument.defaultView)
-            ? clickedElement.ownerDocument.defaultView 
-            : window; // parent window
-    if (!w) {
-      let watcher = Cc["@mozilla.org/embedcomp/window-watcher;1"].getService(Ci.nsIWindowWatcher),
-          width = "750px",
-          height = "350px",
-          features = "alwaysRaised,dependent,centerscreen,chrome,resizable,width="+ width + ",height=" + height;
-      if (util.HostSystem == 'winnt')
-        w = watcher.openWindow(win, uri, name, features, null);
-      else
-        w = win.openDialog(uri, name, features);
-    }
-    if (updateUI) {
-      // make sure QuickFolders UI is updated when about:config is closed.
-      w.addEventListener('unload', function(event) { 
-        QuickFolders.Util.notifyTools.notifyBackground({ func: "updateMainWindow", minimal: "false" }); 
-      });
-    }
-    w.focus();
-    w.addEventListener('load', 
-      function () {
-        let id = (isTbModern) ? "about-config-search" : "textbox";
-        let flt = w.document.getElementById(id);
-        if (flt) {
-           flt.value=filter;
-          // make filter box readonly to prevent damage!
-           if (!readOnly)
-            flt.focus();
-           else
-            flt.setAttribute('readonly',true);
-           if (w.self.FilterPrefs) {
-            w.self.FilterPrefs();
-          }
-        }
-      });
-  },
-
   showVersionHistory: function showVersionHistory(ask) {
     let util = QuickFolders.Util,
         pureVersion=util.VersionSanitized,
@@ -1701,391 +1665,10 @@ QuickFolders.Options = {
 		if (confirm(textPrompt)) {
 			// create (non existent filter setting:
 			QuickFolders.Preferences.setBoolPrefVerbose(filter, Default);
-			QuickFolders.Options.showAboutConfig(null, filter, true, false);
+			QuickFolders.Interface.showAboutConfig(null, filter, true, false);
 		}
 	},
 	
-	storeConfig: function qf_storeConfig(preferences, prefMap) {
-		// see options.copyFolderEntries
-    const Cc = Components.classes,
-          Ci = Components.interfaces,
-		      service = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch),
-					util = QuickFolders.Util,
-					prefs = QuickFolders.Preferences,
-					sFolderString = service.getStringPref("QuickFolders.folders");
-		let obj = JSON.parse(sFolderString),
-        storedObj = { folders: obj }; // wrap into "folders" subobject, so we can add more settings
-
-		// add more settings here! (should we include license string?)
-		if (preferences) {
-			let prefInfos = preferences.getAll();
-			storedObj.general = [];
-			storedObj.advanced = [];
-			storedObj.layout = [];
-			storedObj.userStyle = [];
-			let isLicense =  (QuickFolders.Util.licenseInfo.isExpired || QuickFolders.Util.licenseInfo.isValidated);
-			if (isLicense)
-				storedObj.premium = [];
-      util.logDebug("Storing configuration...")
-
-			for (let info of prefInfos) {
-        let originId = prefMap[info.id];
-				let node = { key: info.id, val: info.value, originalId: originId }
-        if (originId) {
-          switch (originId.substr(0,5)) {
-            case 'qfpg-':  // general
-              storedObj.general.push(node);
-              break;
-            case 'qfpa-':  // advanced
-              storedObj.advanced.push(node);
-              break;
-            case 'qfpl-':  // layout
-              storedObj.layout.push(node);
-              break;
-            case 'qfpp-':  // premium - make sure not to import the License without confirmation!
-              if (isLicense)
-                storedObj.premium.push(node);
-              break;
-            default:
-              util.logDebug("Not storing - unknown preference category: " + node.key);
-          }
-        }
-        else {
-          util.logDebug("Not found - map entry for " + info.id);
-        }
-			}
-			// now save all color pickers.
-			let elements = document.getElementsByTagName('html:input');
-			for (let i=0; i<elements.length; i++) {
-				let element = elements[i];
-				if (element.getAttribute('type')=='color') {
-					let node = { elementInfo: element.getAttribute('elementInfo'), val: element.value };
-					storedObj.userStyle.push(node);
-				}
-			}
-      
-      // [issue 115] store selection for background dropdown
-      const bgKey = 'currentFolderBar.background.selection';
-      let backgroundSelection = prefs.getStringPref(bgKey);
-      storedObj.layout.push({
-        key: 'extensions.quickfolders.' + bgKey, 
-        val: backgroundSelection, 
-        originalId: 'qfpa-CurrentFolder-Selection'} 
-      );
-      
-		}
-
-		let prettifiedJson = JSON.stringify(storedObj, null, '  ');
-		this.fileConfig('save', prettifiedJson, 'QuickFolders-Config');
-    util.logDebug("Configuration stored.")
-	} ,
-
-	loadConfig: function qf_loadConfig(preferences) {
-    const prefs = QuickFolders.Preferences,
-          options = QuickFolders.Options,
-				  util = QuickFolders.Util;
-
-		function changePref(pref) {
-			let p = preferences.get(pref.key);
-			if (p) {
-				if (p._value != pref.val) {
-          // [issue 115] fix restoring of config values
-					util.logDebug("Changing [" + p.id + "] " + pref.originalId + " : " + pref.val);
-					p._value = pref.val;
-          let e = foundElements[pref.key];
-          if (e) {
-            switch(e.tagName) {
-              case 'checkbox':
-                e.checked = pref.val;
-                if (e.getAttribute('oncommand'))
-                  e.dispatchEvent(new Event("command"));
-                break;
-              case 'textbox': // legacy
-              case 'html:input':
-              case 'html:textarea':
-                e.value = pref.val;
-                if (e.id == "currentFolderBackground") {
-                  options.setCurrentToolbarBackgroundCustom();
-                }
-                break;
-              case 'menulist':
-                e.selectedIndex = pref.val;
-                let menuitem = e.selectedItem;
-                if (menuitem && menuitem.getAttribute('oncommand'))
-                  menuitem.dispatchEvent(new Event("command"));
-                break;
-              case 'radiogroup':
-                e.value = pref.val;
-                if (e.getAttribute('oncommand'))
-                  e.dispatchEvent(new Event("command"));
-              default:
-                debugger;
-                break;
-            }
-          }
-				}
-			}
-      else {
-        switch(pref.key) {
-          case 'extensions.quickfolders.currentFolderBar.background.selection':
-            if (pref.val && prefs.getStringPref(pref.key) != pref.val) {
-              options.setCurrentToolbarBackground(pref.val, true);
-            }
-            break;
-          default:
-            util.logDebug("loadConfig - unhandled preference: " + pref.key);
-        }
-      }
-		}
-    
-    function readData(dataString) {
-			const Cc = Components.classes,
-						Ci = Components.interfaces,
-						service = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch),
-            QI = QuickFolders.Interface;
-			try {
-				// removes prettyfication:
-				let config = dataString.replace(/\r?\n|\r/, ''),
-						data = JSON.parse(config),
-				    entries = data.folders,
-            isLayoutModified = false,
-						question = util.getBundleString("qf.prompt.restoreFolders");
-				if (prefs.getBoolPref('restoreConfig.tabs')
-				   && Services.prompt.confirm(window, "QuickFolders", question.replace("{0}", entries.length))) {
-					for (let ent of entries) {
-						if (typeof ent.tabColor ==='undefined' || ent.tabColor ==='undefined')
-							ent.tabColor = 0;
-						// default the name!!
-						if (!ent.name) {
-							// retrieve the name from the folder uri (prettyName)
-							let f = QuickFolders.Model.getMsgFolderFromUri(ent.uri, false);
-							if (f)
-								ent.name = f.prettyName;
-							else
-								ent.name = util.getNameFromURI(ent.uri);
-						}
-					}
-					if (!entries.length)
-						entries=[];
-					// the following function calls this.updateMainWindow() which calls this.updateFolders()
-					util.getMail3PaneWindow().QuickFolders.initTabsFromEntries(entries);
-					let invalidCount = 0,
-					    modelEntries = util.getMail3PaneWindow().QuickFolders.Model.selectedFolders;
-					// updateFolders() will append "invalid" property into entry of main model if folder URL cannot be found
-					for (let i=0; i<modelEntries.length; i++) {
-						if (modelEntries[i].invalid)
-							invalidCount++;
-					}
-
-					question = util.getBundleString("qf.prompt.loadFolders.confirm");
-					if (invalidCount) {
-						let wrn =
-						  util.getBundleString("qfInvalidTabCount");
-						question = wrn.replace("{0}", invalidCount) + "\n" + question;
-					}
-					if (Services.prompt.confirm(window, "QuickFolders", question)) {
-						// store
-						prefs.storeFolderEntries(entries);
-            // notify all windows
-            QuickFolders.Util.notifyTools.notifyBackground({ func: "updateAllTabs" });
-					}
-					else {
-						// roll back
-						util.getMail3PaneWindow().QuickFolders.initTabsFromEntries(prefs.loadFolderEntries());
-					}
-					delete data.folders; // remove this part to move on to the rest of settings
-				}
-        // ====================================================================
-        // [issue 107] Restoring general / layout Settings only works if option for restoring folders also active
-        if (prefs.getBoolPref('restoreConfig.general') && data.general) {
-          for (let i=0; i<data.general.length; i++) {
-            changePref(data.general[i]);
-          }
-          isLayoutModified = true;
-        }
-        if (prefs.getBoolPref('restoreConfig.layout')) {
-          if (data.layout) {
-            for (let i=0; i<data.layout.length; i++) {
-              changePref(data.layout[i]);
-            }
-            isLayoutModified = true;
-          }
-          if (data.advanced) {
-            for (let i=0; i<data.advanced.length; i++) {
-              changePref(data.advanced[i]);
-            }
-          }
-
-          if (data.premium) {
-            for (let i=0; i<data.premium.length; i++) {
-              changePref(data.premium[i]);
-            }
-          }
-          // load custom colors and restore color pickers
-          // options.styleUpdate('Toolbar', 'background-color', this.value, 'qf-StandardColors')
-          if (data.userStyle) {
-            let elements = document.getElementsByTagName('html:input');
-            for (let i=0; i<elements.length; i++) {
-              let element = elements[i];
-              try {
-                if (element.getAttribute('type')=='color') {
-                  let elementInfo = element.getAttribute('elementInfo');
-                  // find the matching entry from json file
-                  for(let j=0; j<data.userStyle.length; j++) {
-                    let jnode = data.userStyle[j];
-                    if (jnode.elementInfo == elementInfo) {
-                      // only change value if nevessary
-                      if (element.value != jnode.val) {
-                        element.value = jnode.val; // change color picker itself
-                        util.logDebug("Changing [" + elementInfo + "] : " + jnode.val);
-                        let info = jnode.elementInfo.split('.');
-                        if (info.length == 2)
-                          options.styleUpdate(
-                            info[0],   // element name e..g. ActiveTab
-                            info[1],   // element style (color / background-color)
-                            jnode.val,
-                            element.getAttribute('previewLabel')); // preview tab / label
-                      }
-                      break;
-                    }
-                  }
-                  // QuickFolders.Preferences.setUserStyle(elementName, elementStyle, styleValue)
-                }
-              }
-              catch(ex) {
-                util.logException("Loading layout setting[" + i + "] (color picker " + element.id + ") failed:", ex);
-              }
-            }
-          }
-
-        }
-        if (isLayoutModified) { // instant visual feedback
-          //  update the main window layout
-          QuickFolders.Util.notifyTools.notifyBackground({ func: "updateFoldersUI" }); // replaced QI.updateObserver();
-        }
-        
-			}
-			catch (ex) {
-				util.logException("Error in QuickFolders.Options.pasteFolderEntries():\n", ex);
-				Services.prompt.alert(null,"QuickFolders", util.getBundleString("qf.alert.pasteFolders.formatErr"));
-			}
-		}
-    // find all controls with bound preferences
-    let myprefElements = document.querySelectorAll("[preference]"),
-		    foundElements = {};
-		for (let myprefElement of myprefElements) {
-      let prefName = myprefElement.getAttribute("preference");
-			foundElements[prefName] = myprefElement;
-		}	
-		this.fileConfig('load', null, null, readData); // load does the reading itself?
-	} ,
-
-	fileConfig: function qf_fileConfig(mode, jsonData, fname, readFunction) {
-		const Cc = Components.classes,
-          Ci = Components.interfaces,
-          util = QuickFolders.Util,
-					prefs = QuickFolders.Preferences,
-					NSIFILE = Ci.nsILocalFile || Ci.nsIFile;
-		util.popupRestrictedFeature(mode + "_config", "", 2); // save_config, load_config
-    
-    let filterText,
-		    fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker),
-        fileOpenMode = (mode=='load') ? fp.modeOpen : fp.modeSave;
-
-		let dPath = prefs.getStringPref('files.path');
-		if (dPath) {
-			let defaultPath = Cc["@mozilla.org/file/local;1"].createInstance(NSIFILE);
-			defaultPath.initWithPath(dPath);
-			if (defaultPath.exists()) { // avoid crashes if the folder has been deleted
-				fp.displayDirectory = defaultPath; // nsILocalFile
-				util.logDebug("Setting default path for filepicker: " + dPath);
-			}
-			else {
-				util.logDebug("fileFilters()\nPath does not exist: " + dPath);
-			}
-		}
-		fp.init(window, "", fileOpenMode); // second parameter: prompt
-    filterText = util.getBundleString("qf.fpJsonFile");
-    fp.appendFilter(filterText, "*.json");
-    fp.defaultExtension = 'json';
-    if (mode == 'save') {
-			let fileName = fname;
-/*
-			if (isDateStamp) {
-				let d = new Date(),
-				    timeStamp = d.getFullYear() + "-" + twoDigs(d.getMonth()+1) + "-" + twoDigs(d.getDate()) + "_" + twoDigs(d.getHours()) + "-" + twoDigs(d.getMinutes());
-				fileName = fname + "_" + timeStamp;
-			}
-			*/
-      fp.defaultString = fileName + '.json';
-    }
-
-    let fpCallback = function fpCallback_FilePicker(aResult) {
-      if (aResult == Ci.nsIFilePicker.returnOK || aResult == Ci.nsIFilePicker.returnReplace) {
-        if (fp.file) {
-          let path = fp.file.path;
-					// Store last Path
-					util.logDebug("File Picker Path: " + path);
-					let lastSlash = path.lastIndexOf("/");
-					if (lastSlash < 0) lastSlash = path.lastIndexOf("\\");
-					let lastPath = path.substr(0, lastSlash);
-					util.logDebug("Storing Path: " + lastPath);
-					prefs.setStringPref('files.path', lastPath);
-
-					const {OS} = (typeof ChromeUtils.import == "undefined") ?
-						Components.utils.import("resource://gre/modules/osfile.jsm", {}) :
-						ChromeUtils.import("resource://gre/modules/osfile.jsm", {});
-
-          //localFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile);
-          switch (mode) {
-            case 'load':
-              let promiseRead = OS.File.read(path, { encoding: "utf-8" }); //  returns Uint8Array
-              promiseRead.then(
-                function readSuccess(data) {
-                  readFunction(data);
-                },
-                function readFailed(ex) {
-                  util.logDebug ('read() - Failure: ' + ex);
-                }
-              )
-              break;
-            case 'save':
-              // if (aResult == Ci.nsIFilePicker.returnReplace)
-              let promiseDelete = OS.File.remove(path);
-              // defined 2 functions
-              util.logDebug ('Setting up promise Delete');
-              promiseDelete.then (
-                function saveJSON() {
-                  util.logDebug ('saveJSON()…');
-                  // force appending correct file extension!
-                  if (!path.toLowerCase().endsWith('.json'))
-                    path += '.json';
-                  let promiseWrite = OS.File.writeAtomic(path, jsonData, { encoding: "utf-8"});
-                  promiseWrite.then(
-                    function saveSuccess(byteCount) {
-                      util.logDebug ('successfully saved ' + byteCount + ' bytes to file');
-                    },
-                    function saveReject(fileError) {  // OS.File.Error
-                      util.logDebug ('bookmarks.save error:' + fileError);
-                    }
-                  );
-                },
-                function failDelete(fileError) {
-                  util.logDebug ('OS.File.remove failed for reason:' + fileError);
-                }
-              );
-              break;
-          }
-        }
-      }
-    }
-    fp.open(fpCallback);
-
-    return true;
- 		
-	},
-  
-
 }
 
 window.document.addEventListener('DOMContentLoaded', 

@@ -10,7 +10,7 @@ toolbar .folderBarContainer toolbarbutton[disabled="true"] {
   background-color: rgb(70,70,70) !important;
   background-image: none !important;
 }
-toolbar .folderBarContainer toolbarbutton[disabled="true"] label {
+toolbar .folderBarContainer toolbarbutton[disabled="true"] > label {
   color: rgb(170,170,170) !important;
 }
 
@@ -52,12 +52,16 @@ toolbar .folderBarContainer toolbarbutton[disabled="true"] label {
 	list-style-image: url("chrome://quickfolders/content/skin/ico/message-invalid.png");
 }
 
+#QuickFolders-ToolbarPopup menuitem image {
+  fill: var(--toolbarbutton-icon-fill, currentColor);
+  fill-opacity: var(--toolbarbutton-icon-fill-opacity);
+}
+
 #QuickFolders-Toolbar toolbarbutton#QuickFolders-mainPopup {
 	list-style-image: url("chrome://quickfolders/content/skin/ico/settings.svg");
   -moz-context-properties: fill, fill-opacity, stroke;
-  fill: currentColor;
+  fill: var(--toolbarbutton-icon-fill, currentColor);
   fill-opacity: var(--toolbarbutton-icon-fill-opacity);
-  stroke: transparent;
 }
 
 #QuickFolders-Toolbar toolbarbutton#QuickFolders-quickMove {
@@ -484,12 +488,20 @@ menupopup.widerMenu menucaption {
 	to {box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.25);}
 }
 
-#QuickFolders-Toolbar #QuickFolders-LabelBox #QuickFolders-title-label.newsflash,
-#QuickFolders-Toolbar #QuickFolders-LabelBox #QuickFolders-title-label.expired {
+#QuickFolders-Toolbar #QuickFolders-LabelBox #QuickFolders-title-label.newsflash {
 	background-color: #006EB7 !important; /* blue */
 	background-image: linear-gradient(to bottom, #0380bf 0%,#006eb7 100%) !important;
   border-radius: 2px !important;
 }
+
+#QuickFolders-Toolbar #QuickFolders-LabelBox #QuickFolders-title-label.expired {
+  background-color: #b80015 !important; /* red */
+  background: linear-gradient(to bottom, #890219 0%,#b80015 100%) !important; 
+  color: white !important;
+}
+
+
+
 #QuickFolders-LabelBox #QuickFolders-title-label.newsflash {
   padding-left: 1em;
   padding-right: 1em;
@@ -1088,15 +1100,16 @@ menupopup.QuickFolders-folder-popup menuitem#quickFolders-openFolderLocation {
 
 #QuickFolders-Close {
 	list-style-image: url(chrome://global/skin/icons/close.svg);
-    fill-opacity: 0 !important;
+	fill-opacity: 0.5 !important;
 }
+
 #QuickFolders-Close:hover {
   fill: currentColor !important;
-	fill-opacity: 0.1 !important;
+	fill-opacity: 0.7 !important;
 }
 
 #QuickFolders-Close:hover:active {
-  fill-opacity: 0.2 !important;
+  fill-opacity: 0.9 !important;
 }
 
 #QuickFolders-NavigateUp {

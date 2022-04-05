@@ -76,14 +76,15 @@ QuickFolders.Util = {
             `onBackgroundUpdates - dispatching custom event QuickFolders.BackgroundUpdate.${data.event}\n` +
             `into ${window.document.location.href.toString()}`);
           let event;
-          if (data.detail) {
+          let n = { ...data}; // shallow copy using spread syntax
+          delete n["event"]; // remove event from the copy and forward the rest on.
+          if (Object.keys(n).length) { // 
             // use CustomEvent.detail for transporting function parameters?
-            event = new CustomEvent(`QuickFolders.BackgroundUpdate.${data.event}`, {detail: data.detail}) 
+            event = new CustomEvent(`QuickFolders.BackgroundUpdate.${data.event}`, {detail: n} ) 
           }
           else {
             event =  new CustomEvent(`QuickFolders.BackgroundUpdate.${data.event}`) ;
           }
-          
           window.dispatchEvent(event); 
         }       
       }      
@@ -400,12 +401,27 @@ QuickFolders.Util = {
     
       util.logDebugOptional("premium", "notifyBox.appendNotification()…");
       const imgSrc = "chrome://quickfolders/content/skin/ico/proFeature.png";
-      let newNotification = 
-        notifyBox.appendNotification( theText, 
-          notificationKey, 
-          imgSrc, 
-          notifyBox.PRIORITY_INFO_HIGH, 
-          nbox_buttons ); 
+      let newNotification;
+
+      if (notifyBox.shown) { // new notification format (Post Tb 99)
+        newNotification = 
+          notifyBox.appendNotification( 
+            notificationKey, // "String identifier that can uniquely identify the type of the notification."
+            {
+              priority: notifyBox.PRIORITY_INFO_HIGH,
+              label: theText 
+            },
+            nbox_buttons // no buttons
+          );
+      }
+      else {
+        newNotification = 
+          notifyBox.appendNotification( theText, 
+            notificationKey, 
+            imgSrc, 
+            notifyBox.PRIORITY_INFO_HIGH, 
+            nbox_buttons ); 
+      }
           
       // setting img was removed in Tb91  
       if (newNotification.messageImage.tagName == "span") {
@@ -1307,9 +1323,9 @@ QuickFolders.Util = {
           URL = URL.substr(0, x)
         }
         if (URL.indexOf("?")==-1)
-          URL = URL + "?user=" + uType;
+          URL = URL + "?user=" + uType + anchor;
         else
-          URL = URL + "&user=" + uType;
+          URL = URL + "&user=" + uType + anchor;
       }
     }
     catch(ex) {

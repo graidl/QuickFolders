@@ -149,6 +149,9 @@
   "purchase-heading" : {
     "message" : "Lisenssin ostaminen!"
   }, 
+  "qf.menuitem.quickfolders.splash" : {
+    "message": "Viimeisimmät päivitykset…"
+  },
   "qf.notification.newsFlash": {
     "message": "$addonName$ päivitettiin! Tärkeitä uutisia…",
     "placeholders": {
@@ -162,7 +165,7 @@
     "message" : "Uusi lisenssi."
   },    
   "special-offer-content" : {
-    "message": "Päivitä ominaisuudet ja säästä {boldStart} $reduction$ {boldEnd} ostamalla QuickFolders Pro -lisenssi! Tämä erikoistarjous on voimassa {boldStart} $expirydate$ {boldEnd} asti. Tai valitse vakiotoiminnot uudella {linkStart}vakiolisenssillä{linkEnd}.",
+    "message": "Päivitä ominaisuudet ja säästä {boldStart} $reduction$ {boldEnd} ostamalla {linkStartPro}QuickFolders Pro -lisenssi{linkEnd}! Tämä erikoistarjous on voimassa {boldStart} $expirydate$ {boldEnd} asti. Tai valitse vakiotoiminnot uudella {linkStart}vakiolisenssillä{linkEnd}.",
     "placeholders": {
       "expirydate": {
         "content": "$1",
@@ -201,7 +204,7 @@
     }
   }, 
   "special-offer-expiry": {
-    "message": "31. lokakuuta"
+    "message": "15. huhtikuuta"
   }, 
   "special-offer-head": {
     "message": "Auta pitämään $addon$ yhteensopivana",
@@ -220,7 +223,7 @@
         "example": "QuickFolders"
       }
     }
-  } , 
+  }, 
   "support-preference" : {
     "message": "Tämä on ensisijainen tapa tukea $addonName$.",
     "placeholders": {
@@ -280,7 +283,7 @@
     "message": "Lue yksityiskohtainen muutosloki täältä (vain englanniksi):" 
   },
   "whats-new-list": {
-    "message": "{L1} Thunderbird ei enää siirry Inboxiin, kun kontekstivalikosta etsitään uusia viestejä. {L2} {L1} Tuki suurelle kuvakkeelle QuickFolders -työkalupalkin painikkeissa korkean resoluution näytöille. {L2} {L1} Korjattu: kansioiden siirtäminen QuickMove -toiminnosta epäonnistui Tb91: ssä. {L2} {L1} Erilaisia Thunderbird 91: n ulkoasun korjauksia. {L2}"
+    "message": "{L1}Versio 5.9.1: Yksinkertaistettu viimeisimmät kansiot -valikon toiminta näppäimistöllä liikkumista varten.{L2}{L1}Uusi [=] QuickMoven näppäin luetteloi viimeisimmät QuickMoven/quickJumpin käyttämät kansiot.{L2} {L1}QuickJumpin oletusarvo käyttää nyt aina viimeistä kansiota. Jos identtiset kansionimet löytyivät, oli mahdollista yhdistää muita ehdotuksia kansion viimeisen sijainnin sijasta.{L2} {L1}Asetukset-valintaikkuna muutettiin HTML-muotoon - tämä on tärkeä askel QuickFoldersille kohti puhdasta API-pohjaista postia. laajennus ilman kokeellisia käyttöoikeuksia tulevaisuudessa.{L2} {L1}Poistettu QuickJumpin ongelmat kompaktin tilan kansiopuussa.{L2} {L1}Parannettu luokkien muokkausikkuna.{L2}"
   },
   "window-title": {
     "message": "Tervetuloa osoitteeseen $addonName$",

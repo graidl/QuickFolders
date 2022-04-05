@@ -9,11 +9,15 @@ END LICENSE BLOCK */
 /* shared module for installation popups */
 
 async function updateActions(addonName) { 
+  let endSale = new Date("2022-04-15"), // Next Sale End Date
+      currentTime = new Date();
+      
   // Currently we do not notify this page if the license information is updated in the background.
   let licenseInfo = await messenger.runtime.sendMessage({command:"getLicenseInfo"});
   // LICENSING FLOW
   let isExpired = licenseInfo.isExpired,
       isValid = licenseInfo.isValid,
+      isProUser = (licenseInfo.keyType == 0 || licenseInfo.keyType == 1),
       isStandard = (licenseInfo.keyType==2);
   
   function hide(id) {
@@ -50,10 +54,6 @@ async function updateActions(addonName) {
   hide('licenseExtended');
   
   let isActionList = true;
-  
-  let currentTime = new Date(),
-      endSale = new Date("2021-10-31"); // Next Sale End Date
-      
   let overrideSale = await messenger.LegacyPrefs.getPref("extensions.quickfolders.debug.saleDate");
   if (overrideSale) endSale = overrideSale;
   

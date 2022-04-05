@@ -491,7 +491,7 @@
     "message": "Pulsante delle cartelle recenti"
   },
   "qf.checkbox.showRecentTab": {
-    "message": "Visualizza la scheda delle cartelle recenti"
+    "message": "Scheda Cartelle recenti"
   },
   "qf.checkbox.showRecentTab.tooltip": {
     "message": "Fare clic col pulsante destro del mouse per la configurazione"
@@ -1006,7 +1006,7 @@
     "message": "Riparazione delle icone della struttura delle cartelle"
   },
   "qf.menuitem.quickfolders.splash" : {
-    "message": "Visualizza schermata iniziale"
+    "message": "Ultimi aggiornamenti notizie…"
   },
   "qf.menuitem.quickfolders.support": {
     "message": "Supporto di QuickFolders…"
@@ -1661,6 +1661,9 @@
   "quickMove.help.l3b": {
     "message" : "Questo è utile per gerarchie di cartelle più profonde, più complicate o sconosciute."
   },   
+  "quickMove.help.l4a": {
+    "message" : "Digitare {1} per ottenere un elenco delle cartelle che sono state inserite più di recente. Il numero di risultati dipende dal tuo livello di licenza."
+  }, 
   "quickMove.help.advanced": {
     "message" : "Funzioni più avanzate come le scorciatoie da tastiera per andare in una cartella/spostare la posta o escludere le cartelle dai risultati della ricerca possono essere configurate nella scheda QuickFolders Pro. Per accedere a queste e ad altre funzionalità premium, ottieni una licenza Pro e supporta il futuro di QuickFolders."
   },  
@@ -1713,7 +1716,7 @@
     "message": "Renouvelez votre licence."
   },
   "special-offer-content": {
-    "message": "Aggiorna le tue funzionalità e risparmia {boldStart}$reduction${boldEnd} acquistando una licenza QuickFolders Pro! Questa offerta speciale sarà disponibile fino al {boldStart}$expirydate${boldEnd}. Oppure scegli le funzioni standard con la nuova {linkStart}Licenza Standard{linkEnd}.",
+    "message": "Aggiorna le tue funzionalità e risparmia {boldStart}$reduction${boldEnd} acquistando una licenza {linkStartPro}QuickFolders Pro{linkEnd}! Questa offerta speciale sarà disponibile fino al {boldStart}$expirydate${boldEnd}. Oppure scegli le funzioni standard con la nuova {linkStart}Licenza Standard{linkEnd}.",
     "placeholders": {
       "expirydate": {
         "content": "$1",
@@ -1752,7 +1755,7 @@
     }
   }, 
   "special-offer-expiry": {
-    "message": "31 ottobre"    
+    "message": "15 aprile"    
   },
   "special-offer-head": {
     "message": "Aiutaci a mantenere la compatibilità con $addon$",
@@ -1849,7 +1852,7 @@
     "message": "Leggi il registro delle modifiche dettagliato qui (solo in inglese):"
   },
   "whats-new-list": {
-    "message": "{L1}Thunderbird non entra più nella Posta in arrivo quando si controlla la presenza di nuovi messaggi dal menu contestuale.{L2}{L1}Supporto per icone grandi nei pulsanti della barra degli strumenti di QuickFolders per visualizzazioni ad alta risoluzione.{L2}{L1}Risolto: spostamento delle cartelle dalla funzione quickMove non riuscita in Tb91.{L2}{L1}Varie correzioni di layout specifiche per Thunderbird 91.{L2}"
+    "message": "{L1}Versione 5.9.1: comportamento del menu delle cartelle recenti semplificato per la navigazione tramite tastiera.{L2}{L1}Nuovo tasto [=] per QuickMove per elencare le cartelle più recenti utilizzate da quickMove / quickJump.{L2} {L1}Il valore predefinito di quickJump ora utilizza sempre l'ultima cartella. C'era la possibilità di abbinare altri suggerimenti piuttosto che l'ultima posizione della cartella se fosse possibile trovare nomi di cartelle identici.{L2} {L1}La finestra di dialogo delle opzioni è stata convertita in HTML: questo è un passo importante per QuickFolders per diventare una posta basata su API pura estensione senza autorizzazioni sperimentali in futuro.{L2} {L1}Rimossi problemi con quickJump nell'albero delle cartelle in modalità compatta.{L2} {L1}Finestra di dialogo di modifica delle categorie migliorata.{L2}"
   },
   "window-title": {
     "description": "page title. first placeholder will be replaced with Add-on name",
